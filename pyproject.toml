@@ -1,0 +1,23 @@
+[project]
+name = "room-reservation-app"
+version = "0.1.0"
+description = "Веб-сервис для автоматизации бронирования переговорных комнат в коворкинге"
+authors = [
+    {name = "n1ck-L",email = "nikitalut@yandex.ru"}
+]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi (>=0.139.2,<0.140.0)",
+    "sqlalchemy (>=2.0.51,<3.0.0)",
+    "uvicorn (>=0.51.0,<0.52.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+test = [
+    "pytest (>=9.1.1,<10.0.0)"
+]
