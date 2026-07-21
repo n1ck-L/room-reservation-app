@@ -5,7 +5,13 @@ from sqlalchemy.orm import Session
 from app.models.reservation import ReservationORM
 from app.repositories.reservation import ReservationRepository
 from app.repositories.room import RoomRepository
-from app.schemas.room import RoomSchema, RoomCreateSchema, RoomUpdateSchema, RoomAvailabilitySchema, TimeSlotSchema
+from app.schemas.room import (
+    RoomAvailabilitySchema,
+    RoomCreateSchema,
+    RoomSchema,
+    RoomUpdateSchema,
+    TimeSlotSchema,
+)
 from app.services.exceptions import NotFoundError
 
 # Рабочий день: с 9:00 до 18:00, слот = 1 час
@@ -20,10 +26,9 @@ class RoomService:
         self.repository = RoomRepository(db)
         self.reservation_repository = ReservationRepository(db)
 
-    def list_rooms(self,
-                   target_date: date | None = None,
-                   available: bool | None = None
-                   ) -> list[RoomSchema] | list[RoomAvailabilitySchema]:
+    def list_rooms(
+        self, target_date: date | None = None, available: bool | None = None
+    ) -> list[RoomSchema] | list[RoomAvailabilitySchema]:
         rooms = self.repository.get_all()
 
         # Список комнат без даты
@@ -35,7 +40,11 @@ class RoomService:
         result = []
 
         for room in rooms:
-            room_reservations = [reservation for reservation in reservations if reservation.room_id == room.id]
+            room_reservations = [
+                reservation
+                for reservation in reservations
+                if reservation.room_id == room.id
+            ]
 
             free_slots = self._calc_free_slots_per_room(target_date, room_reservations)
             room_data = RoomSchema.model_validate(room)
@@ -63,19 +72,21 @@ class RoomService:
 
     def create_room(self, room_create: RoomCreateSchema) -> RoomSchema:
         # проверку что роль = admin
-        room_orm = self.repository.create(number=room_create.number,
-                                          capacity=room_create.capacity,
-                                          location=room_create.location,
-                                          equipment=room_create.equipment)
+        room_orm = self.repository.create(
+            number=room_create.number,
+            capacity=room_create.capacity,
+            location=room_create.location,
+            equipment=room_create.equipment,
+        )
         self.db.commit()
         return RoomSchema.model_validate(room_orm)
-    
+
     def update_room(self, room_id: str, room_update: RoomUpdateSchema) -> RoomSchema:
         # проверку что роль = admin
         room_for_update = self.repository.get_by_id(id=room_id)
         if room_for_update is None:
             raise NotFoundError("Комната", room_id)
-        
+
         if room_update.number is not None:
             room_for_update.number = room_update.number
         if room_update.capacity is not None:
@@ -84,7 +95,7 @@ class RoomService:
             room_for_update.location = room_update.location
         if room_update.equipment is not None:
             room_for_update.equipment = room_update.equipment
-        
+
         self.db.commit()
         return RoomSchema.model_validate(room_for_update)
 
@@ -93,11 +104,13 @@ class RoomService:
         room_to_delete = self.repository.get_by_id(id=room_id)
         if room_to_delete is None:
             raise NotFoundError("Комната", room_id)
-        
+
         self.repository.delete(room_to_delete)
         self.db.commit()
 
-    def _calc_free_slots_per_room(self, target_date: date, reservations: list[ReservationORM]) -> list[TimeSlotSchema]:
+    def _calc_free_slots_per_room(
+        self, target_date: date, reservations: list[ReservationORM]
+    ) -> list[TimeSlotSchema]:
         slots = []
         current = datetime.combine(target_date, WORK_START)
         end_of_day = datetime.combine(target_date, WORK_END)
@@ -109,7 +122,10 @@ class RoomService:
 
             is_busy = False
             for reservation in reservations:
-                if reservation.start_time < slot_end and reservation.end_time > slot_start:
+                if (
+                    reservation.start_time < slot_end
+                    and reservation.end_time > slot_start
+                ):
                     is_busy = True
                     break
 

@@ -3,7 +3,7 @@ import hashlib
 from sqlalchemy.orm import Session
 
 from app.repositories.user import UserRepository
-from app.schemas.user import UserSchema, UserCreateSchema, UserUpdateSchema
+from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 from app.services.exceptions import NotFoundError
 
 
@@ -19,25 +19,29 @@ class UserService:
 
     def create_user(self, user_create: UserCreateSchema) -> UserSchema:
         # проверку что роль = admin
-        user_orm = self.repository.create(email=user_create.email, 
-                                          login=user_create.login,
-                                          password=self._hash_password(user_create.password.get_secret_value()))
+        user_orm = self.repository.create(
+            email=user_create.email,
+            login=user_create.login,
+            password=self._hash_password(user_create.password.get_secret_value()),
+        )
         self.db.commit()
         return UserSchema.model_validate(user_orm)
-    
+
     def update_user(self, user_id: str, user_update: UserUpdateSchema) -> UserSchema:
         # проверку что роль = admin
         user_for_update = self.repository.get_by_id(id=user_id)
         if user_for_update is None:
             raise NotFoundError("Пользователь", user_id)
-        
+
         if user_update.email is not None:
             user_for_update.email = user_update.email
         if user_update.login is not None:
             user_for_update.login = user_update.login
         if user_update.password is not None:
-            user_for_update.password = self._hash_password(user_update.password.get_secret_value())
-        
+            user_for_update.password = self._hash_password(
+                user_update.password.get_secret_value()
+            )
+
         self.db.commit()
         return UserSchema.model_validate(user_for_update)
 
@@ -46,11 +50,11 @@ class UserService:
         user_to_delete = self.repository.get_by_id(id=user_id)
         if user_to_delete is None:
             raise NotFoundError("Пользователь", user_id)
-        
+
         self.repository.delete(user_to_delete)
         self.db.commit()
 
     def _hash_password(self, password: str) -> str:
-        password_bytes = password.encode('utf-8')
+        password_bytes = password.encode("utf-8")
         hash_object = hashlib.sha256(password_bytes)
         return hash_object.hexdigest()

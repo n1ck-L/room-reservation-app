@@ -7,7 +7,7 @@ from app.models.base import Base
 class RoomORM(Base):
     __tablename__ = "rooms"
 
-    number: Mapped[int] 
+    number: Mapped[int]
     capacity: Mapped[int]
     location: Mapped[str] = mapped_column(String(100))
     equipment: Mapped[list[str]] = mapped_column(JSON, default=list)
