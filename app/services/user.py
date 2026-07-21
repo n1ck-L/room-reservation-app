@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.repositories.user import UserRepository
 from app.schemas.user import UserSchema, UserCreateSchema, UserUpdateSchema
-from app.services.exceptions import UserNotFound
+from app.services.exceptions import NotFoundError
 
 
 class UserService:
@@ -27,9 +27,9 @@ class UserService:
     
     def update_user(self, user_id: str, user_update: UserUpdateSchema) -> UserSchema:
         # проверку что роль = admin
-        user_for_update = self.repository.get_by_id(user_id=user_id)
+        user_for_update = self.repository.get_by_id(id=user_id)
         if user_for_update is None:
-            raise UserNotFound(f"Пользователь с id={user_id} не найден")
+            raise NotFoundError("Пользователь", user_id)
         
         if user_update.email is not None:
             user_for_update.email = user_update.email
@@ -43,9 +43,9 @@ class UserService:
 
     def delete_user(self, user_id: str) -> None:
         # проверку что роль = admin
-        user_to_delete = self.repository.get_by_id(user_id=user_id)
+        user_to_delete = self.repository.get_by_id(id=user_id)
         if user_to_delete is None:
-            raise UserNotFound(f"Пользователь с id={user_id} не найден")
+            raise NotFoundError("Пользователь", user_id)
         
         self.repository.delete(user_to_delete)
         self.db.commit()
