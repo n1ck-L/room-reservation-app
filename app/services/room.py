@@ -1,18 +1,65 @@
+from datetime import date, datetime, time, timedelta
+
 from sqlalchemy.orm import Session
 
+from app.models.reservation import ReservationORM
+from app.repositories.reservation import ReservationRepository
 from app.repositories.room import RoomRepository
-from app.schemas.room import RoomSchema, RoomCreateSchema, RoomUpdateSchema
+from app.schemas.room import RoomSchema, RoomCreateSchema, RoomUpdateSchema, RoomAvailabilitySchema, TimeSlotSchema
 from app.services.exceptions import NotFoundError
+
+# Рабочий день: с 9:00 до 18:00, слот = 1 час
+WORK_START = time(9, 0)
+WORK_END = time(18, 0)
+SLOT_MINUTES = 60
 
 
 class RoomService:
     def __init__(self, db: Session):
         self.db = db
         self.repository = RoomRepository(db)
+        self.reservation_repository = ReservationRepository(db)
 
-    def list_rooms(self) -> list[RoomSchema]:
+    def list_rooms(self,
+                   target_date: date | None = None,
+                   available: bool | None = None
+                   ) -> list[RoomSchema] | list[RoomAvailabilitySchema]:
         rooms = self.repository.get_all()
-        return [RoomSchema.model_validate(room) for room in rooms]
+
+        # Список комнат без даты
+        if target_date is None:
+            return [RoomSchema.model_validate(room) for room in rooms]
+
+        # Список комнат со свободными слотами на дату
+        reservations = self.reservation_repository.get_for_date(target_date)
+        result = []
+
+        for room in rooms:
+            room_reservations = [reservation for reservation in reservations if reservation.room_id == room.id]
+
+            free_slots = self._calc_free_slots_per_room(target_date, room_reservations)
+            room_data = RoomSchema.model_validate(room)
+
+            result.append(
+                RoomAvailabilitySchema(
+                    id=room_data.id,
+                    number=room_data.number,
+                    capacity=room_data.capacity,
+                    location=room_data.location,
+                    equipment=room_data.equipment,
+                    date=target_date,
+                    free_slots=free_slots,
+                    is_bookable=len(free_slots) > 0,
+                )
+            )
+
+        if available is True:
+            return [room for room in result if room.is_bookable]
+
+        if available is False:
+            return [room for room in result if not room.is_bookable]
+
+        return result
 
     def create_room(self, room_create: RoomCreateSchema) -> RoomSchema:
         # проверку что роль = admin
@@ -49,3 +96,26 @@ class RoomService:
         
         self.repository.delete(room_to_delete)
         self.db.commit()
+
+    def _calc_free_slots_per_room(self, target_date: date, reservations: list[ReservationORM]) -> list[TimeSlotSchema]:
+        slots = []
+        current = datetime.combine(target_date, WORK_START)
+        end_of_day = datetime.combine(target_date, WORK_END)
+        step = timedelta(minutes=SLOT_MINUTES)
+
+        while current + step <= end_of_day:
+            slot_start = current
+            slot_end = current + step
+
+            is_busy = False
+            for reservation in reservations:
+                if reservation.start_time < slot_end and reservation.end_time > slot_start:
+                    is_busy = True
+                    break
+
+            if not is_busy:
+                slots.append(TimeSlotSchema(start=slot_start, end=slot_end))
+
+            current = slot_end
+
+        return slots

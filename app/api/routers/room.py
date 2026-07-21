@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from datetime import date
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.api.dependencies import get_room_service
-from app.schemas.room import RoomSchema, RoomCreateSchema, RoomUpdateSchema
+from app.schemas.room import RoomSchema, RoomCreateSchema, RoomUpdateSchema, RoomAvailabilitySchema
 from app.services.exceptions import NotFoundError
 from app.services.room import RoomService
 
@@ -10,13 +12,22 @@ router = APIRouter(prefix="/rooms")
 
 
 @router.get("")
-def get_rooms(room_service: RoomService = Depends(get_room_service)) -> list[RoomSchema]:
-    return room_service.list_rooms()
+def list_rooms(date: date | None = Query(None, description="Дата для проверки свободных слотов"),
+               available: bool | None = Query(None, description="Фильтр свободных слотов"),
+               room_service: RoomService = Depends(get_room_service)) -> list[RoomSchema] | list[RoomAvailabilitySchema]:
+    if available is not None and date is None:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Параметр available требует указания date",
+        )
+    return room_service.list_rooms(target_date=date, available=available)
+
 
 @router.post("")
 def create_room(payload: RoomCreateSchema,
                 room_service: RoomService = Depends(get_room_service)) -> RoomSchema:
     return room_service.create_room(room_create=payload)
+
 
 @router.patch("/{room_id}")
 def update_room(payload: RoomUpdateSchema,
@@ -26,9 +37,10 @@ def update_room(payload: RoomUpdateSchema,
         return room_service.update_room(room_id=room_id, room_update=payload)
     except NotFoundError as e:
         raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=str(e)
-            )
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        )
+
 
 @router.delete("/{room_id}")
 def delete_room(room_id: str,
@@ -37,6 +49,6 @@ def delete_room(room_id: str,
         room_service.delete_room(room_id=room_id)
     except NotFoundError as e:
         raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=str(e)
-            )
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        )
