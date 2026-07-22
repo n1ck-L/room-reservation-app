@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base
 
+
 class RefreshTokenORM(Base):
     __tablename__ = "refresh_tokens"
 

@@ -23,7 +23,9 @@ def create_user(
     try:
         return user_service.create_user(user_create=payload)
     except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail=str(e)
+        )
 
 
 @router.patch("/{user_id}")

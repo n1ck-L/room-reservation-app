@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, SecretStr
 
+
 class LoginSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

@@ -25,9 +25,7 @@ class UserService:
         user_orm = self.repository.create(
             email=user_create.email,
             login=user_create.login,
-            password=hash_password(
-                user_create.password.get_secret_value()
-            ),
+            password=hash_password(user_create.password.get_secret_value()),
         )
         self.db.commit()
         return UserSchema.model_validate(user_orm)
