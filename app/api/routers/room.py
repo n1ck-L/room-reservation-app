@@ -12,7 +12,7 @@ from app.schemas.room import (
 from app.services.exceptions import NotFoundError
 from app.services.room import RoomService
 
-router = APIRouter(prefix="/rooms")
+router = APIRouter(prefix="/rooms", tags=["rooms"])
 
 
 @router.get("")

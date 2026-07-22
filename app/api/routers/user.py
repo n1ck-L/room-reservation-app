@@ -5,7 +5,7 @@ from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 from app.services.exceptions import NotFoundError
 from app.services.user import UserService
 
-router = APIRouter(prefix="/users")
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("")

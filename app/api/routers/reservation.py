@@ -9,7 +9,7 @@ from app.schemas.reservation import (
 from app.services.exceptions import NotFoundError
 from app.services.reservation import ReservationService
 
-router = APIRouter(prefix="/reservations")
+router = APIRouter(prefix="/reservations", tags=["reservations"])
 
 
 @router.get("")

@@ -4,7 +4,7 @@ from app.schemas.auth import LoginSchema, TokenRevokeSchema, TokenSchema, TokenR
 from app.services.auth import AuthService
 from app.api.dependencies import get_auth_service
 
-router = APIRouter(prefix="/auth/tokens")
+router = APIRouter(prefix="/auth/tokens", tags=["auth"])
 
 
 @router.post("")
@@ -32,6 +32,6 @@ def refresh(payload: TokenRefreshSchema,
 
 
 @router.post("/revoke")
-def refresh(payload: TokenRevokeSchema,
+def revoke(payload: TokenRevokeSchema,
             auth_service: AuthService = Depends(get_auth_service)) -> None:
     auth_service.revoke_token(token_data=payload)
