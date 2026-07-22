@@ -19,6 +19,10 @@ class ReservationRepository(BaseRepository[ReservationORM]):
         )
         return list(self.db.scalars(query).all())
 
+    def get_by_user_id(self, user_id: str) -> list[ReservationORM]:
+        query = select(ReservationORM).where(ReservationORM.user_id == user_id)
+        return list(self.db.scalars(query).all())
+
     def create(
         self,
         room_id: str,

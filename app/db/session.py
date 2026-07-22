@@ -1,9 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.schemas.settings import SettingsSchema
+from app.core.settings import settings
 
-settings = SettingsSchema()
 engine = create_engine(str(settings.DATABASE_URL))
 SessionLocal = sessionmaker[Session](bind=engine)
 

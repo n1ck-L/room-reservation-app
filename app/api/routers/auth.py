@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from app.api.dependencies import get_auth_service
 from app.schemas.auth import (
     LoginSchema,
+    TokenRefreshSchema,
     TokenRevokeSchema,
     TokenSchema,
-    TokenRefreshSchema,
 )
 from app.services.auth import AuthService
-from app.api.dependencies import get_auth_service
+from app.services.exceptions import UnauthorizedError
 
 router = APIRouter(prefix="/auth/tokens", tags=["auth"])
 
@@ -18,7 +19,7 @@ def login(
 ) -> TokenSchema:
     try:
         return auth_service.login(payload=payload)
-    except ValueError as e:
+    except UnauthorizedError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(e),
@@ -32,7 +33,7 @@ def refresh(
 ) -> TokenSchema:
     try:
         return auth_service.refresh_token(token_data=payload)
-    except ValueError as e:
+    except UnauthorizedError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(e),

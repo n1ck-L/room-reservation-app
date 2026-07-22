@@ -16,3 +16,8 @@ class SettingsSchema(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: PositiveInt = 15
     REFRESH_TOKEN_EXPIRE_DAYS: PositiveInt = 7
+
+    SEED_DEFAULT_ADMIN: bool
+    DEFAULT_ADMIN_LOGIN: str
+    DEFAULT_ADMIN_PASSWORD: SecretStr
+    DEFAULT_ADMIN_EMAIL: str

@@ -2,13 +2,18 @@ from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
-from app.api.dependencies import get_room_service
+from app.api.dependencies import (
+    get_current_user,
+    get_room_service,
+    require_admin,
+)
 from app.schemas.room import (
     RoomAvailabilitySchema,
     RoomCreateSchema,
     RoomSchema,
     RoomUpdateSchema,
 )
+from app.schemas.user import CurrentUserSchema
 from app.services.exceptions import NotFoundError
 from app.services.room import RoomService
 
@@ -23,6 +28,7 @@ def list_rooms(
     available: bool | None = Query(
         None, description="Фильтр свободных слотов"
     ),
+    _: CurrentUserSchema = Depends(get_current_user),
     room_service: RoomService = Depends(get_room_service),
 ) -> list[RoomSchema] | list[RoomAvailabilitySchema]:
     if available is not None and date is None:
@@ -36,6 +42,7 @@ def list_rooms(
 @router.post("")
 def create_room(
     payload: RoomCreateSchema,
+    _: CurrentUserSchema = Depends(require_admin),
     room_service: RoomService = Depends(get_room_service),
 ) -> RoomSchema:
     return room_service.create_room(room_create=payload)
@@ -45,6 +52,7 @@ def create_room(
 def update_room(
     payload: RoomUpdateSchema,
     room_id: str,
+    _: CurrentUserSchema = Depends(require_admin),
     room_service: RoomService = Depends(get_room_service),
 ) -> RoomSchema:
     try:
@@ -58,7 +66,9 @@ def update_room(
 
 @router.delete("/{room_id}")
 def delete_room(
-    room_id: str, room_service: RoomService = Depends(get_room_service)
+    room_id: str,
+    _: CurrentUserSchema = Depends(require_admin),
+    room_service: RoomService = Depends(get_room_service),
 ) -> None:
     try:
         room_service.delete_room(room_id=room_id)

@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta, timezone
 
+from jose import JWTError
 from sqlalchemy.orm import Session
 
-from app.schemas.settings import SettingsSchema
+from app.core.settings import settings
 from app.core.settings import (
     create_access_token,
     create_refresh_token,
+    decode_access_token,
     decode_refresh_token,
     verify_password,
 )
@@ -17,6 +19,8 @@ from app.schemas.auth import (
     TokenRevokeSchema,
     TokenSchema,
 )
+from app.schemas.user import CurrentUserSchema
+from app.services.exceptions import NotFoundError, UnauthorizedError
 
 
 class AuthService:
@@ -28,19 +32,19 @@ class AuthService:
     def login(self, payload: LoginSchema) -> TokenSchema:
         user = self.user_repository.get_by_login(payload.login)
         if user is None:
-            raise ValueError("Неверный login или password")
+            raise UnauthorizedError("Неверный login или password")
 
         if not verify_password(
             plain=payload.password.get_secret_value(), hashed=user.password
         ):
-            raise ValueError("Неверный login или password")
+            raise UnauthorizedError("Неверный login или password")
 
         token_data = {"sub": user.id}
         access_token = create_access_token(token_data)
         refresh_token = create_refresh_token(token_data)
 
         expires_at = datetime.now(timezone.utc) + timedelta(
-            days=SettingsSchema().REFRESH_TOKEN_EXPIRE_DAYS
+            days=settings.REFRESH_TOKEN_EXPIRE_DAYS
         )
 
         self.refresh_repository.create(
@@ -56,20 +60,24 @@ class AuthService:
         )
 
     def refresh_token(self, token_data: TokenRefreshSchema) -> TokenSchema:
-        payload = decode_refresh_token(token=token_data.refresh_token)
+        try:
+            payload = decode_refresh_token(token=token_data.refresh_token)
+        except JWTError:
+            raise UnauthorizedError("Невалидный refresh-токен")
+
         if payload.get("type") != "refresh":
-            raise ValueError("Неверный тип токена")
+            raise UnauthorizedError("Неверный тип токена")
 
         refresh_orm = self.refresh_repository.get_by_token(
             token_data.refresh_token
         )
         if refresh_orm is None or refresh_orm.is_revoked:
-            raise ValueError("Refresh-токен недействителен")
+            raise UnauthorizedError("Refresh-токен недействителен")
 
         if refresh_orm.expires_at.replace(tzinfo=timezone.utc) < datetime.now(
             timezone.utc
         ):
-            raise ValueError("Refresh-токен истёк")
+            raise UnauthorizedError("Refresh-токен истёк")
 
         user_id = payload.get("sub")
         access_token_data = {"sub": user_id}
@@ -87,3 +95,22 @@ class AuthService:
 
         refresh_orm.is_revoked = True
         self.db.commit()
+
+    def get_current_user(self, token: str) -> CurrentUserSchema:
+        try:
+            payload = decode_access_token(token)
+        except JWTError:
+            raise UnauthorizedError("Невалидный токен")
+
+        if payload.get("type") != "access":
+            raise UnauthorizedError("Неверный тип токена")
+
+        user_id = payload.get("sub")
+        if user_id is None:
+            raise UnauthorizedError("Невалидный токен")
+
+        user = self.user_repository.get_by_id(user_id)
+        if user is None:
+            raise NotFoundError("Пользователь", user_id)
+
+        return CurrentUserSchema.model_validate(user)

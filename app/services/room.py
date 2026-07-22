@@ -23,13 +23,13 @@ SLOT_MINUTES = 60
 class RoomService:
     def __init__(self, db: Session):
         self.db = db
-        self.repository = RoomRepository(db)
+        self.room_repository = RoomRepository(db)
         self.reservation_repository = ReservationRepository(db)
 
     def list_rooms(
         self, target_date: date | None = None, available: bool | None = None
     ) -> list[RoomSchema] | list[RoomAvailabilitySchema]:
-        rooms = self.repository.get_all()
+        rooms = self.room_repository.get_all()
 
         # Список комнат без даты
         if target_date is None:
@@ -73,8 +73,7 @@ class RoomService:
         return result
 
     def create_room(self, room_create: RoomCreateSchema) -> RoomSchema:
-        # проверку что роль = admin
-        room_orm = self.repository.create(
+        room_orm = self.room_repository.create(
             number=room_create.number,
             capacity=room_create.capacity,
             location=room_create.location,
@@ -86,8 +85,7 @@ class RoomService:
     def update_room(
         self, room_id: str, room_update: RoomUpdateSchema
     ) -> RoomSchema:
-        # проверку что роль = admin
-        room_for_update = self.repository.get_by_id(id=room_id)
+        room_for_update = self.room_repository.get_by_id(id=room_id)
         if room_for_update is None:
             raise NotFoundError("Комната", room_id)
 
@@ -104,12 +102,11 @@ class RoomService:
         return RoomSchema.model_validate(room_for_update)
 
     def delete_room(self, room_id: str) -> None:
-        # проверку что роль = admin
-        room_to_delete = self.repository.get_by_id(id=room_id)
+        room_to_delete = self.room_repository.get_by_id(id=room_id)
         if room_to_delete is None:
             raise NotFoundError("Комната", room_id)
 
-        self.repository.delete(room_to_delete)
+        self.room_repository.delete(room_to_delete)
         self.db.commit()
 
     def _calc_free_slots_per_room(
