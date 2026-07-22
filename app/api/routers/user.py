@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.api.dependencies import get_user_service, require_admin
+from app.api.responses import ADMIN, RESP_204, RESP_404, RESP_409, combine
 from app.schemas.user import (
     CurrentUserSchema,
     UserCreateSchema,
@@ -13,7 +14,7 @@ from app.services.user import UserService
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get("")
+@router.get("", responses=ADMIN)
 def get_users(
     _: CurrentUserSchema = Depends(require_admin),
     user_service: UserService = Depends(get_user_service),
@@ -21,7 +22,9 @@ def get_users(
     return user_service.list_users()
 
 
-@router.post("")
+@router.post(
+    "", status_code=status.HTTP_201_CREATED, responses=combine(ADMIN, RESP_409)
+)
 def create_user(
     payload: UserCreateSchema,
     _: CurrentUserSchema = Depends(require_admin),
@@ -35,7 +38,7 @@ def create_user(
         )
 
 
-@router.patch("/{user_id}")
+@router.patch("/{user_id}", responses=combine(ADMIN, RESP_404))
 def update_user(
     payload: UserUpdateSchema,
     user_id: str,
@@ -50,7 +53,11 @@ def update_user(
         )
 
 
-@router.delete("/{user_id}")
+@router.delete(
+    "/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses=combine(RESP_204, ADMIN, RESP_404),
+)
 def delete_user(
     user_id: str,
     _: CurrentUserSchema = Depends(require_admin),

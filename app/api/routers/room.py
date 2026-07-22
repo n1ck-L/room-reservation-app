@@ -7,6 +7,14 @@ from app.api.dependencies import (
     get_room_service,
     require_admin,
 )
+from app.api.responses import (
+    ADMIN,
+    AUTH,
+    RESP_204,
+    RESP_404,
+    RESP_422,
+    combine,
+)
 from app.schemas.room import (
     RoomAvailabilitySchema,
     RoomCreateSchema,
@@ -20,7 +28,7 @@ from app.services.room import RoomService
 router = APIRouter(prefix="/rooms", tags=["rooms"])
 
 
-@router.get("")
+@router.get("", responses=combine(AUTH, RESP_422))
 def list_rooms(
     date: date | None = Query(
         None, description="Дата для проверки свободных слотов"
@@ -39,7 +47,7 @@ def list_rooms(
     return room_service.list_rooms(target_date=date, available=available)
 
 
-@router.post("")
+@router.post("", status_code=status.HTTP_201_CREATED, responses=ADMIN)
 def create_room(
     payload: RoomCreateSchema,
     _: CurrentUserSchema = Depends(require_admin),
@@ -48,7 +56,10 @@ def create_room(
     return room_service.create_room(room_create=payload)
 
 
-@router.patch("/{room_id}")
+@router.patch(
+    "/{room_id}",
+    responses=combine(ADMIN, RESP_404),
+)
 def update_room(
     payload: RoomUpdateSchema,
     room_id: str,
@@ -64,7 +75,11 @@ def update_room(
         )
 
 
-@router.delete("/{room_id}")
+@router.delete(
+    "/{room_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses=combine(RESP_204, ADMIN, RESP_404),
+)
 def delete_room(
     room_id: str,
     _: CurrentUserSchema = Depends(require_admin),

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.api.dependencies import get_auth_service
+from app.api.responses import AUTH, RESP_422, combine
 from app.schemas.auth import (
     LoginSchema,
     TokenRefreshSchema,
@@ -13,7 +14,7 @@ from app.services.exceptions import UnauthorizedError
 router = APIRouter(prefix="/auth/tokens", tags=["auth"])
 
 
-@router.post("")
+@router.post("", responses=AUTH)
 def login(
     payload: LoginSchema, auth_service: AuthService = Depends(get_auth_service)
 ) -> TokenSchema:
@@ -26,7 +27,7 @@ def login(
         )
 
 
-@router.post("/refresh")
+@router.post("/refresh", responses=AUTH)
 def refresh(
     payload: TokenRefreshSchema,
     auth_service: AuthService = Depends(get_auth_service),
@@ -40,7 +41,11 @@ def refresh(
         )
 
 
-@router.post("/revoke")
+@router.post(
+    "/revoke",
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses=combine(RESP_422),
+)
 def revoke(
     payload: TokenRevokeSchema,
     auth_service: AuthService = Depends(get_auth_service),

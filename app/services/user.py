@@ -2,7 +2,12 @@ from sqlalchemy.orm import Session
 
 from app.core.settings import hash_password
 from app.repositories.user import UserRepository
-from app.schemas.user import UserCreateSchema, UserRole, UserSchema, UserUpdateSchema
+from app.schemas.user import (
+    UserCreateSchema,
+    UserRole,
+    UserSchema,
+    UserUpdateSchema,
+)
 from app.services.exceptions import NotFoundError
 from app.core.settings import settings
 
@@ -63,13 +68,18 @@ class UserService:
         if not settings.SEED_DEFAULT_ADMIN:
             return
 
-        if self.repository.get_by_login(settings.DEFAULT_ADMIN_LOGIN) is not None:
+        if (
+            self.repository.get_by_login(settings.DEFAULT_ADMIN_LOGIN)
+            is not None
+        ):
             return
 
         self.repository.create(
             email=settings.DEFAULT_ADMIN_EMAIL,
             login=settings.DEFAULT_ADMIN_LOGIN,
-            password=hash_password(settings.DEFAULT_ADMIN_PASSWORD.get_secret_value()),
+            password=hash_password(
+                settings.DEFAULT_ADMIN_PASSWORD.get_secret_value()
+            ),
             role=UserRole.ADMIN,
         )
         self.db.commit()

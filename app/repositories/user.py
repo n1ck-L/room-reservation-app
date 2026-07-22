@@ -8,7 +8,13 @@ from app.schemas.user import UserRole
 class UserRepository(BaseRepository[UserORM]):
     model = UserORM
 
-    def create(self, email: str, login: str, password: str, role: UserRole = UserRole.EMPLOYEE) -> UserORM:
+    def create(
+        self,
+        email: str,
+        login: str,
+        password: str,
+        role: UserRole = UserRole.EMPLOYEE,
+    ) -> UserORM:
         new = UserORM(email=email, login=login, password=password, role=role)
         self.db.add(new)
         return new
