@@ -20,7 +20,10 @@ def create_user(
     payload: UserCreateSchema,
     user_service: UserService = Depends(get_user_service),
 ) -> UserSchema:
-    return user_service.create_user(user_create=payload)
+    try:
+        return user_service.create_user(user_create=payload)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
 
 
 @router.patch("/{user_id}")

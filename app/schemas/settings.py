@@ -1,4 +1,4 @@
-from pydantic import PostgresDsn, SecretStr
+from pydantic import PostgresDsn, SecretStr, PositiveInt
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,5 +10,10 @@ class SettingsSchema(BaseSettings):
     DATABASE_URL: PostgresDsn
     DATABASE_PASS: SecretStr
     DATABASE_USR: str
-    CORS_ALLOWED_ORIGINS: list[str]
-    CORS_ALLOWED_METHODS: list[str]
+
+    JWT_SECRET_KEY: SecretStr
+    JWT_REFRESH_SECRET_KEY: SecretStr
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: PositiveInt = 15
+    REFRESH_TOKEN_EXPIRE_DAYS: PositiveInt = 7
+

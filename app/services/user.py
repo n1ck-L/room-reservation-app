@@ -1,7 +1,6 @@
-import hashlib
-
 from sqlalchemy.orm import Session
 
+from app.core.settings import hash_password
 from app.repositories.user import UserRepository
 from app.schemas.user import UserCreateSchema, UserSchema, UserUpdateSchema
 from app.services.exceptions import NotFoundError
@@ -19,10 +18,14 @@ class UserService:
 
     def create_user(self, user_create: UserCreateSchema) -> UserSchema:
         # проверку что роль = admin
+        existing = self.repository.get_by_login(user_create.login)
+        if existing is not None:
+            raise ValueError("Пользователь с таким login уже существует")
+
         user_orm = self.repository.create(
             email=user_create.email,
             login=user_create.login,
-            password=self._hash_password(
+            password=hash_password(
                 user_create.password.get_secret_value()
             ),
         )
@@ -42,7 +45,7 @@ class UserService:
         if user_update.login is not None:
             user_for_update.login = user_update.login
         if user_update.password is not None:
-            user_for_update.password = self._hash_password(
+            user_for_update.password = hash_password(
                 user_update.password.get_secret_value()
             )
 
@@ -57,8 +60,3 @@ class UserService:
 
         self.repository.delete(user_to_delete)
         self.db.commit()
-
-    def _hash_password(self, password: str) -> str:
-        password_bytes = password.encode("utf-8")
-        hash_object = hashlib.sha256(password_bytes)
-        return hash_object.hexdigest()
