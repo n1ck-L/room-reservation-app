@@ -17,7 +17,8 @@ def get_users(
 
 @router.post("")
 def create_user(
-    payload: UserCreateSchema, user_service: UserService = Depends(get_user_service)
+    payload: UserCreateSchema,
+    user_service: UserService = Depends(get_user_service),
 ) -> UserSchema:
     return user_service.create_user(user_create=payload)
 
@@ -31,7 +32,9 @@ def update_user(
     try:
         return user_service.update_user(user_id=user_id, user_update=payload)
     except NotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
+        )
 
 
 @router.delete("/{user_id}")
@@ -41,4 +44,6 @@ def delete_user(
     try:
         user_service.delete_user(user_id=user_id)
     except NotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
+        )

@@ -10,7 +10,10 @@ class RoomRepository(BaseRepository[RoomORM]):
     ) -> RoomORM:
 
         new = RoomORM(
-            number=number, capacity=capacity, location=location, equipment=equipment
+            number=number,
+            capacity=capacity,
+            location=location,
+            equipment=equipment,
         )
         self.db.add(new)
         return new

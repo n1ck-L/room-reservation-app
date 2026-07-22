@@ -17,8 +17,12 @@ router = APIRouter(prefix="/rooms")
 
 @router.get("")
 def list_rooms(
-    date: date | None = Query(None, description="Дата для проверки свободных слотов"),
-    available: bool | None = Query(None, description="Фильтр свободных слотов"),
+    date: date | None = Query(
+        None, description="Дата для проверки свободных слотов"
+    ),
+    available: bool | None = Query(
+        None, description="Фильтр свободных слотов"
+    ),
     room_service: RoomService = Depends(get_room_service),
 ) -> list[RoomSchema] | list[RoomAvailabilitySchema]:
     if available is not None and date is None:
@@ -31,7 +35,8 @@ def list_rooms(
 
 @router.post("")
 def create_room(
-    payload: RoomCreateSchema, room_service: RoomService = Depends(get_room_service)
+    payload: RoomCreateSchema,
+    room_service: RoomService = Depends(get_room_service),
 ) -> RoomSchema:
     return room_service.create_room(room_create=payload)
 

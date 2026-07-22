@@ -3,7 +3,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class SettingsSchema(BaseSettings):
-    model_config = SettingsConfigDict(env_file=r"app\.env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=r"app\.env", env_file_encoding="utf-8"
+    )
 
     DATABASE_URL: PostgresDsn
     DATABASE_PASS: SecretStr

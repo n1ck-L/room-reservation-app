@@ -46,7 +46,9 @@ class RoomService:
                 if reservation.room_id == room.id
             ]
 
-            free_slots = self._calc_free_slots_per_room(target_date, room_reservations)
+            free_slots = self._calc_free_slots_per_room(
+                target_date, room_reservations
+            )
             room_data = RoomSchema.model_validate(room)
 
             result.append(
@@ -81,7 +83,9 @@ class RoomService:
         self.db.commit()
         return RoomSchema.model_validate(room_orm)
 
-    def update_room(self, room_id: str, room_update: RoomUpdateSchema) -> RoomSchema:
+    def update_room(
+        self, room_id: str, room_update: RoomUpdateSchema
+    ) -> RoomSchema:
         # проверку что роль = admin
         room_for_update = self.repository.get_by_id(id=room_id)
         if room_for_update is None:

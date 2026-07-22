@@ -22,12 +22,16 @@ class UserService:
         user_orm = self.repository.create(
             email=user_create.email,
             login=user_create.login,
-            password=self._hash_password(user_create.password.get_secret_value()),
+            password=self._hash_password(
+                user_create.password.get_secret_value()
+            ),
         )
         self.db.commit()
         return UserSchema.model_validate(user_orm)
 
-    def update_user(self, user_id: str, user_update: UserUpdateSchema) -> UserSchema:
+    def update_user(
+        self, user_id: str, user_update: UserUpdateSchema
+    ) -> UserSchema:
         # проверку что роль = admin
         user_for_update = self.repository.get_by_id(id=user_id)
         if user_for_update is None:
