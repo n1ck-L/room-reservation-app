@@ -18,3 +18,19 @@ class ReservationRepository(BaseRepository[ReservationORM]):
             ReservationORM.end_time > day_start,
         )
         return list(self.db.scalars(query).all())
+
+    def create(
+        self,
+        room_id: str,
+        user_id: str,
+        start_time: datetime,
+        end_time: datetime,
+    ) -> ReservationORM:
+        new = ReservationORM(
+            room_id=room_id,
+            user_id=user_id,
+            start_time=start_time,
+            end_time=end_time,
+        )
+        self.db.add(new)
+        return new

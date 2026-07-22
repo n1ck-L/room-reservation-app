@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.services.room import RoomService
 from app.services.user import UserService
+from app.services.reservation import ReservationService
 
 ServiceType = TypeVar("ServiceType")
 
@@ -21,3 +22,4 @@ def service_dependency(service_class: type[ServiceType]):
 
 get_user_service = service_dependency(UserService)
 get_room_service = service_dependency(RoomService)
+get_reservation_service = service_dependency(ReservationService)
