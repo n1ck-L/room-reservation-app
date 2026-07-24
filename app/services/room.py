@@ -73,6 +73,10 @@ class RoomService:
         return result
 
     def create_room(self, room_create: RoomCreateSchema) -> RoomSchema:
+        existing = self.room_repository.get_by_number_location(room_create.number, room_create.location)
+        if existing is not None:
+            raise ValueError("Комната с таким номером по этому адресу уже существует")
+        
         room_orm = self.room_repository.create(
             number=room_create.number,
             capacity=room_create.capacity,
