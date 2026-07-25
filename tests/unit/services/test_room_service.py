@@ -38,6 +38,7 @@ def make_room(
 def make_reservation(mocker, room_id, start_time, end_time):
     return mocker.MagicMock(room_id=room_id, start_time=start_time, end_time=end_time)
 
+
 @pytest.mark.unit
 @pytest.mark.service
 @pytest.mark.room_service

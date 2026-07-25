@@ -3,7 +3,10 @@ import datetime
 import pytest
 
 from app.services.exceptions import NotFoundError
-from tests.unit.routers.conftest import AUTH_DENIAL_CASES_ADMIN, AUTH_DENIAL_CASES_NO_ADMIN
+from tests.unit.routers.conftest import (
+    AUTH_DENIAL_CASES_ADMIN,
+    AUTH_DENIAL_CASES_NO_ADMIN,
+)
 
 
 @pytest.fixture
@@ -33,30 +36,37 @@ class TestRoomsGetResponse:
         assert response.status_code == 200
         mock_room_service.list_rooms.assert_called_once()
 
-    
-    @pytest.mark.parametrize("query_params", [
-        {"date": "2026-07-23", "available": "true"},
-        {"date": "2026-07-23", "available": "false"},
-    ])
-    def test_get_rooms_returns_list_with_query_params(self, admin_client, mock_room_service, query_params):
+    @pytest.mark.parametrize(
+        "query_params",
+        [
+            {"date": "2026-07-23", "available": "true"},
+            {"date": "2026-07-23", "available": "false"},
+        ],
+    )
+    def test_get_rooms_returns_list_with_query_params(
+        self, admin_client, mock_room_service, query_params
+    ):
         response = admin_client.get("/rooms", params=query_params)
 
         assert response.status_code == 200
         mock_room_service.list_rooms.assert_called_once_with(
             target_date=datetime.date(2026, 7, 23),
-            available=True if query_params["available"] == "true" else False
+            available=True if query_params["available"] == "true" else False,
         )
 
-    def test_get_rooms_with_date_without_available_returns_list(self, admin_client, mock_room_service):
+    def test_get_rooms_with_date_without_available_returns_list(
+        self, admin_client, mock_room_service
+    ):
         response = admin_client.get("/rooms", params={"date": "2026-07-23"})
 
         assert response.status_code == 200
         mock_room_service.list_rooms.assert_called_once_with(
-            target_date=datetime.date(2026, 7, 23),
-            available=None
+            target_date=datetime.date(2026, 7, 23), available=None
         )
 
-    def test_get_rooms_with_available_without_date_returns_422(self, admin_client, mock_room_service):
+    def test_get_rooms_with_available_without_date_returns_422(
+        self, admin_client, mock_room_service
+    ):
         response = admin_client.get("/rooms", params={"available": "true"})
 
         assert response.status_code == 422
@@ -72,7 +82,7 @@ class TestRoomsGetResponse:
             {"date": "2026-07-23", "available": "abc"},
             {"date": "2026-07-23", "available": "123"},
             {"date": "2026-07-23", "available": 123},
-        ]
+        ],
     )
     def test_get_rooms_invalid_params_returns_422(
         self, admin_client, mock_room_service, params
@@ -82,7 +92,9 @@ class TestRoomsGetResponse:
         assert response.status_code == 422
         mock_room_service.list_rooms.assert_not_called()
 
-    @pytest.mark.parametrize("client_fixture, expected_status", AUTH_DENIAL_CASES_NO_ADMIN)
+    @pytest.mark.parametrize(
+        "client_fixture, expected_status", AUTH_DENIAL_CASES_NO_ADMIN
+    )
     def test_get_rooms_denies_unauthorized(
         self, request, client_fixture, expected_status, mock_room_service
     ):
@@ -92,15 +104,19 @@ class TestRoomsGetResponse:
         assert response.status_code == expected_status
         mock_room_service.list_rooms.assert_not_called()
 
-    def test_get_rooms_returns_401_without_auth(self, anonymous_client, mock_user_service):
-            response = anonymous_client.get("/users")
-    
-            assert response.status_code == 401
-            assert response.json()["detail"] == "Not authenticated"
-            assert response.headers.get("www-authenticate") == "Bearer"
-            mock_user_service.list_users.assert_not_called()
+    def test_get_rooms_returns_401_without_auth(
+        self, anonymous_client, mock_user_service
+    ):
+        response = anonymous_client.get("/users")
 
-    def test_get_rooms_returns_401_with_invalid_token(self, invalid_token_client, mock_room_service):
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Not authenticated"
+        assert response.headers.get("www-authenticate") == "Bearer"
+        mock_user_service.list_users.assert_not_called()
+
+    def test_get_rooms_returns_401_with_invalid_token(
+        self, invalid_token_client, mock_room_service
+    ):
         response = invalid_token_client.get(
             "/rooms",
             headers={"Authorization": "Bearer invalid-token"},
@@ -135,11 +151,19 @@ class TestRoomCreateResponse:
         response = admin_client.post("/rooms", json=create_payload)
 
         assert response.status_code == 409
-        assert response.json()["detail"] == "Комната с таким номером по этому адресу уже существует"
+        assert (
+            response.json()["detail"]
+            == "Комната с таким номером по этому адресу уже существует"
+        )
 
     @pytest.mark.parametrize("client_fixture,expected_status", AUTH_DENIAL_CASES_ADMIN)
     def test_create_room_denies_unauthorized(
-        self, request, client_fixture, expected_status, mock_room_service, create_payload
+        self,
+        request,
+        client_fixture,
+        expected_status,
+        mock_room_service,
+        create_payload,
     ):
         client = request.getfixturevalue(client_fixture)
         response = client.post("/rooms", json=create_payload)
@@ -186,7 +210,12 @@ class TestRoomUpdateResponse:
 
     @pytest.mark.parametrize("client_fixture,expected_status", AUTH_DENIAL_CASES_ADMIN)
     def test_update_room_denies_unauthorized(
-        self, request, client_fixture, expected_status, mock_room_service, update_payload
+        self,
+        request,
+        client_fixture,
+        expected_status,
+        mock_room_service,
+        update_payload,
     ):
         client = request.getfixturevalue(client_fixture)
         response = client.patch("/rooms/r1", json=update_payload)
@@ -208,7 +237,9 @@ class TestRoomDeleteResponse:
         assert response.content == b""
         mock_room_service.delete_room.assert_called_once_with(room_id="r1")
 
-    def test_delete_room_returns_404_when_not_found(self, admin_client, mock_room_service):
+    def test_delete_room_returns_404_when_not_found(
+        self, admin_client, mock_room_service
+    ):
         mock_room_service.delete_room.side_effect = NotFoundError("Комната", "missing")
 
         response = admin_client.delete("/rooms/missing")

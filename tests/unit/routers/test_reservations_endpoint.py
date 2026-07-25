@@ -27,7 +27,9 @@ def update_payload():
 class TestReservationsGetResponse:
     """GET /reservations"""
 
-    def test_get_reservations_returns_list(self, employee_client, mock_reservation_service):
+    def test_get_reservations_returns_list(
+        self, employee_client, mock_reservation_service
+    ):
         response = employee_client.get("/reservations")
 
         assert response.status_code == 200
@@ -105,9 +107,16 @@ class TestReservationCreateResponse:
         assert response.status_code == 422
         assert response.json()["detail"] == "start_time должен быть раньше end_time"
 
-    @pytest.mark.parametrize("client_fixture,expected_status", AUTH_DENIAL_CASES_NO_ADMIN)
+    @pytest.mark.parametrize(
+        "client_fixture,expected_status", AUTH_DENIAL_CASES_NO_ADMIN
+    )
     def test_create_reservation_denies_unauthorized(
-        self, request, client_fixture, expected_status, mock_reservation_service, create_payload
+        self,
+        request,
+        client_fixture,
+        expected_status,
+        mock_reservation_service,
+        create_payload,
     ):
         client = request.getfixturevalue(client_fixture)
         response = client.post("/reservations", json=create_payload)
@@ -178,9 +187,16 @@ class TestReservationUpdateResponse:
         assert response.status_code == 422
         assert response.json()["detail"] == "start_time должен быть раньше end_time"
 
-    @pytest.mark.parametrize("client_fixture,expected_status", AUTH_DENIAL_CASES_NO_ADMIN)
+    @pytest.mark.parametrize(
+        "client_fixture,expected_status", AUTH_DENIAL_CASES_NO_ADMIN
+    )
     def test_update_reservation_denies_unauthorized(
-        self, request, client_fixture, expected_status, mock_reservation_service, update_payload
+        self,
+        request,
+        client_fixture,
+        expected_status,
+        mock_reservation_service,
+        update_payload,
     ):
         client = request.getfixturevalue(client_fixture)
         response = client.patch("/reservations/res1", json=update_payload)
@@ -208,7 +224,9 @@ class TestReservationUpdateResponse:
 class TestReservationDeleteResponse:
     """DELETE /reservations/{reservation_id}"""
 
-    def test_delete_reservation_returns_204(self, employee_client, mock_reservation_service):
+    def test_delete_reservation_returns_204(
+        self, employee_client, mock_reservation_service
+    ):
         response = employee_client.delete("/reservations/res1")
 
         assert response.status_code == 204
@@ -240,7 +258,9 @@ class TestReservationDeleteResponse:
 
         assert response.status_code == 404
 
-    @pytest.mark.parametrize("client_fixture,expected_status", AUTH_DENIAL_CASES_NO_ADMIN)
+    @pytest.mark.parametrize(
+        "client_fixture,expected_status", AUTH_DENIAL_CASES_NO_ADMIN
+    )
     def test_delete_reservation_denies_unauthorized(
         self, request, client_fixture, expected_status, mock_reservation_service
     ):

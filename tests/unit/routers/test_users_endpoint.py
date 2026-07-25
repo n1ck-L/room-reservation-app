@@ -40,7 +40,9 @@ class TestUsersGetResponse:
         assert response.status_code == expected_status
         mock_user_service.list_users.assert_not_called()
 
-    def test_get_users_returns_401_without_auth(self, anonymous_client, mock_user_service):
+    def test_get_users_returns_401_without_auth(
+        self, anonymous_client, mock_user_service
+    ):
         response = anonymous_client.get("/users")
 
         assert response.status_code == 401
@@ -48,7 +50,9 @@ class TestUsersGetResponse:
         assert response.headers.get("www-authenticate") == "Bearer"
         mock_user_service.list_users.assert_not_called()
 
-    def test_get_users_returns_401_with_invalid_token(self, invalid_token_client, mock_user_service):
+    def test_get_users_returns_401_with_invalid_token(
+        self, invalid_token_client, mock_user_service
+    ):
         response = invalid_token_client.get(
             "/users",
             headers={"Authorization": "Bearer invalid-token"},
@@ -58,7 +62,9 @@ class TestUsersGetResponse:
         assert response.json()["detail"] == "Невалидный токен"
         mock_user_service.list_users.assert_not_called()
 
-    def test_get_users_returns_422_for_validation_error(self, validation_error_client, mock_user_service):
+    def test_get_users_returns_422_for_validation_error(
+        self, validation_error_client, mock_user_service
+    ):
         response = validation_error_client.get("/users")
 
         assert response.status_code == 422
@@ -97,7 +103,12 @@ class TestUserCreateResponse:
 
     @pytest.mark.parametrize("client_fixture,expected_status", AUTH_DENIAL_CASES_ADMIN)
     def test_create_user_denies_unauthorized(
-        self, request, client_fixture, expected_status, mock_user_service, create_payload
+        self,
+        request,
+        client_fixture,
+        expected_status,
+        mock_user_service,
+        create_payload,
     ):
         client = request.getfixturevalue(client_fixture)
         response = client.post("/users", json=create_payload)
@@ -105,13 +116,15 @@ class TestUserCreateResponse:
         assert response.status_code == expected_status
         mock_user_service.create_user.assert_not_called()
 
-    def test_create_user_returns_401_without_auth(self, anonymous_client, mock_user_service, create_payload):
-            response = anonymous_client.post("/users", json=create_payload)
-    
-            assert response.status_code == 401
-            assert response.json()["detail"] == "Not authenticated"
-            assert response.headers.get("www-authenticate") == "Bearer"
-            mock_user_service.list_users.assert_not_called()
+    def test_create_user_returns_401_without_auth(
+        self, anonymous_client, mock_user_service, create_payload
+    ):
+        response = anonymous_client.post("/users", json=create_payload)
+
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Not authenticated"
+        assert response.headers.get("www-authenticate") == "Bearer"
+        mock_user_service.list_users.assert_not_called()
 
     def test_create_user_returns_401_with_invalid_token(
         self, invalid_token_client, mock_user_service, create_payload
@@ -144,7 +157,9 @@ class TestUserUpdateResponse:
     def test_update_user_returns_404_when_not_found(
         self, admin_client, mock_user_service, update_payload
     ):
-        mock_user_service.update_user.side_effect = NotFoundError("Пользователь", "missing")
+        mock_user_service.update_user.side_effect = NotFoundError(
+            "Пользователь", "missing"
+        )
 
         response = admin_client.patch("/users/missing", json=update_payload)
 
@@ -152,7 +167,12 @@ class TestUserUpdateResponse:
 
     @pytest.mark.parametrize("client_fixture,expected_status", AUTH_DENIAL_CASES_ADMIN)
     def test_update_user_denies_unauthorized(
-        self, request, client_fixture, expected_status, mock_user_service, update_payload
+        self,
+        request,
+        client_fixture,
+        expected_status,
+        mock_user_service,
+        update_payload,
     ):
         client = request.getfixturevalue(client_fixture)
         response = client.patch("/users/u1", json=update_payload)
@@ -160,7 +180,9 @@ class TestUserUpdateResponse:
         assert response.status_code == expected_status
         mock_user_service.update_user.assert_not_called()
 
-    def test_update_user_returns_401_without_auth(self, anonymous_client, mock_user_service, update_payload):
+    def test_update_user_returns_401_without_auth(
+        self, anonymous_client, mock_user_service, update_payload
+    ):
         response = anonymous_client.patch("/users/u1", json=update_payload)
 
         assert response.status_code == 401
@@ -195,8 +217,12 @@ class TestUserDeleteResponse:
         assert response.content == b""
         mock_user_service.delete_user.assert_called_once_with(user_id="u1")
 
-    def test_delete_user_returns_404_when_not_found(self, admin_client, mock_user_service):
-        mock_user_service.delete_user.side_effect = NotFoundError("Пользователь", "missing")
+    def test_delete_user_returns_404_when_not_found(
+        self, admin_client, mock_user_service
+    ):
+        mock_user_service.delete_user.side_effect = NotFoundError(
+            "Пользователь", "missing"
+        )
 
         response = admin_client.delete("/users/missing")
 
@@ -212,7 +238,9 @@ class TestUserDeleteResponse:
         assert response.status_code == expected_status
         mock_user_service.delete_user.assert_not_called()
 
-    def test_delete_user_returns_401_without_auth(self, anonymous_client, mock_user_service):
+    def test_delete_user_returns_401_without_auth(
+        self, anonymous_client, mock_user_service
+    ):
         response = anonymous_client.delete("/users/u1")
 
         assert response.status_code == 401

@@ -15,11 +15,7 @@ def repo(mock_db):
 @pytest.mark.user_repository
 class TestCreate:
     def test_creates_user_with_given_fields(self, repo, mock_db):
-        user = repo.create(
-            email="test@test.ru",
-            login="test",
-            password="test"
-        )
+        user = repo.create(email="test@test.ru", login="test", password="test")
 
         assert user is not None
         assert isinstance(user, UserORM)
@@ -29,15 +25,11 @@ class TestCreate:
         assert user.role == UserRole.EMPLOYEE
 
     def test_repo_adds_new_user_to_db(self, repo, mock_db):
-        user = repo.create(
-            email="test@test.ru",
-            login="test",
-            password="test"
-        )
+        user = repo.create(email="test@test.ru", login="test", password="test")
 
         mock_db.add.assert_called_once_with(user)
 
-    
+
 @pytest.mark.unit
 @pytest.mark.repository
 @pytest.mark.user_repository
@@ -45,11 +37,7 @@ class TestGetByLogin:
     def test_builds_query_filtered_by_login(self, repo, mock_db, mocker):
         mock_select = mocker.patch("app.repositories.user.select")
         query = mock_select.return_value.where.return_value
-        expected = UserORM(
-            email="test@test.ru",
-            login="test",
-            password="test"
-        )
+        expected = UserORM(email="test@test.ru", login="test", password="test")
         mock_db.scalars.return_value.first.return_value = expected
 
         result = repo.get_by_login(login="test")

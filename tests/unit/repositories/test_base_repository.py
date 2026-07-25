@@ -15,6 +15,7 @@ class ConcreteRepository(BaseRepository[FakeModel]):
 def repo(mock_db):
     return ConcreteRepository(mock_db)
 
+
 @pytest.mark.unit
 @pytest.mark.repository
 @pytest.mark.room_repository
@@ -34,7 +35,9 @@ class TestInit:
 @pytest.mark.reservation_repository
 @pytest.mark.token_repository
 class TestGetAll:
-    def test_builds_select_for_model_and_returns_all_scalars(self, repo, mock_db, mocker):
+    def test_builds_select_for_model_and_returns_all_scalars(
+        self, repo, mock_db, mocker
+    ):
         mock_select = mocker.patch("app.repositories.base.select")
         expected = [FakeModel(), FakeModel()]
         mock_db.scalars.return_value.all.return_value = expected

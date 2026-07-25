@@ -29,13 +29,13 @@ class TestCreate:
         assert room.equipment == ["projector", "whiteboard"]
 
     def test_repo_adds_new_room_to_db(self, repo, mock_db):
-        room = repo.create(
-            number=202, capacity=10, location="Building B", equipment=[]
-        )
+        room = repo.create(number=202, capacity=10, location="Building B", equipment=[])
 
         mock_db.add.assert_called_once_with(room)
 
-    def test_defaults_equipment_list_is_not_shared_between_instances(self, repo, mock_db):
+    def test_defaults_equipment_list_is_not_shared_between_instances(
+        self, repo, mock_db
+    ):
         room1 = repo.create(number=1, capacity=5, location="A", equipment=[])
         room1.equipment.append("mic")
         room2 = repo.create(number=2, capacity=5, location="A", equipment=[])

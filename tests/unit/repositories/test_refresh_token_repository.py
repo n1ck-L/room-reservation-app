@@ -30,7 +30,7 @@ class TestCreate:
         assert result.user_id == "user-1"
         assert result.token == "abc123"
         assert result.expires_at == expires_at
-        assert result.is_revoked == False
+        assert result.is_revoked is False
 
     def test_adds_new_instance_to_session(self, repo, mock_db, mocker):
         result = repo.create(
@@ -52,7 +52,10 @@ class TestGetByToken:
     ):
         mock_select = mocker.patch("app.repositories.refresh_token.select")
         expected = RefreshTokenORM(
-            user_id="id", token="token", expires_at=datetime(2026, 8, 2, 9, 0), is_revoked=False
+            user_id="id",
+            token="token",
+            expires_at=datetime(2026, 8, 2, 9, 0),
+            is_revoked=False,
         )
         query = mock_select.return_value.where.return_value
         mock_db.scalars.return_value.first.return_value = expected

@@ -36,6 +36,7 @@ def app():
 
 # Service mocks
 
+
 @pytest.fixture
 def mock_service(mocker):
     def _make(**kwargs):
@@ -50,12 +51,12 @@ def mock_service(mocker):
 @pytest.fixture
 def mock_user_service(mock_service):
     test_data = UserSchema(
-                    id="u1",
-                    email="a@example.com",
-                    login="alice",
-                    password=SecretStr("password"),
-                    role=UserRole.EMPLOYEE,
-                )
+        id="u1",
+        email="a@example.com",
+        login="alice",
+        password=SecretStr("password"),
+        role=UserRole.EMPLOYEE,
+    )
 
     return mock_service(
         list_users=[test_data],
@@ -67,7 +68,9 @@ def mock_user_service(mock_service):
 
 @pytest.fixture
 def mock_room_service(mock_service):
-    room_test = RoomSchema(id="r1", number=1, capacity=1, location="a", equipment=["a", "b"])
+    room_test = RoomSchema(
+        id="r1", number=1, capacity=1, location="a", equipment=["a", "b"]
+    )
     return mock_service(
         list_rooms=[room_test],
         create_room=room_test,
@@ -92,6 +95,7 @@ def mock_reservation_service(mock_service):
         delete_reservation=None,
     )
 
+
 @pytest.fixture
 def mock_auth_service(mock_service):
     token_test = TokenSchema(access_token="access-token", refresh_token="refresh-token")
@@ -103,6 +107,7 @@ def mock_auth_service(mock_service):
 
 
 # Auth identities
+
 
 @pytest.fixture
 def admin_user():
@@ -116,8 +121,15 @@ def employee_user():
 
 # Test clients
 
+
 @pytest.fixture
-def override_services(app, mock_user_service, mock_room_service, mock_reservation_service, mock_auth_service):
+def override_services(
+    app,
+    mock_user_service,
+    mock_room_service,
+    mock_reservation_service,
+    mock_auth_service,
+):
     app.dependency_overrides[get_user_service] = lambda: mock_user_service
     app.dependency_overrides[get_room_service] = lambda: mock_room_service
     app.dependency_overrides[get_reservation_service] = lambda: mock_reservation_service
@@ -176,7 +188,9 @@ def validation_error_client(override_services, admin_user):
     ) -> CurrentUserSchema:
         return admin_user
 
-    override_services.dependency_overrides[get_current_user] = get_current_user_with_required_query
+    override_services.dependency_overrides[get_current_user] = (
+        get_current_user_with_required_query
+    )
 
     with TestClient(override_services) as test_client:
         yield test_client
