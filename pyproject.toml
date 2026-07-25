@@ -26,9 +26,47 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "black (>=26.5.1,<27.0.0)",
     "flake8 (>=7.3.0,<8.0.0)",
-    "autoflake (>=2.3.3,<3.0.0)"
+    "flake8-pyproject (>=1.2.4,<2.0.0)",
+    "pytest (>=9.1.1,<10.0.0)",
+    "pytest-mock (>=3.15.1,<4.0.0)",
+    "httpx2 (>=2.7.0,<3.0.0)",
 ]
+
+[tool.poetry]
+packages = [{ include = "app" }]
 
 [tool.black]
 target-version = ['py311']
-line-length = 79
+line-length = 88
+
+[tool.flake8]
+max-line-length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+  "-v",
+  "--import-mode=importlib"
+]
+markers = [
+    "unit: Юнит-тесты для компонентов",
+
+    "service: Тесты бизнес-логики (сервисный слой)",
+    "user_service: Тесты бизнес-логики сервиса пользователей",
+    "room_service: Тесты бизнес-логики сервиса комнат",
+    "reservation_service: Тесты бизнес-логики сервиса бронирований",
+    "auth_service: Тесты бизнес-логики сервиса токенов",
+    
+    "router: Тесты API-эндпоинтов (роутеры)",
+    "user_router: Тесты API-эндпоинтов управления пользователями",
+    "room_router: Тесты API-эндпоинтов управления комнатами",
+    "reservation_router: Тесты API-эндпоинтов управления бронированиями",
+    "auth_router: Тесты API-эндпоинтов управления токенами",
+
+    "repository: Тесты работы с базой данных (слой репозитория)",
+    "user_repository: Тесты работы с базой данных пользователей (users table)",
+    "room_repository: Тесты работы с базой данных комнат (rooms table)",
+    "reservation_repository: Тесты работы с базой данных бронирований (reservations table)",
+    "token_repository: Тесты работы с базой данных токенов (refresh_tokens table)",
+    
+]

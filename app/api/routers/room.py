@@ -12,7 +12,6 @@ from app.api.responses import (
     AUTH,
     RESP_204,
     RESP_404,
-    RESP_422,
     combine,
 )
 from app.schemas.room import (
@@ -28,7 +27,7 @@ from app.services.room import RoomService
 router = APIRouter(prefix="/rooms", tags=["rooms"])
 
 
-@router.get("", responses=combine(AUTH, RESP_422))
+@router.get("", responses=AUTH)
 def list_rooms(
     date: date | None = Query(
         None, description="Дата для проверки свободных слотов"
@@ -53,7 +52,12 @@ def create_room(
     _: CurrentUserSchema = Depends(require_admin),
     room_service: RoomService = Depends(get_room_service),
 ) -> RoomSchema:
-    return room_service.create_room(room_create=payload)
+    try:
+        return room_service.create_room(room_create=payload)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail=str(e)
+        )
 
 
 @router.patch(
