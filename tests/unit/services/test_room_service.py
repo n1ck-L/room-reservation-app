@@ -38,7 +38,9 @@ def make_room(
 def make_reservation(mocker, room_id, start_time, end_time):
     return mocker.MagicMock(room_id=room_id, start_time=start_time, end_time=end_time)
 
-
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.room_service
 class TestListRooms:
     TARGET_DATE = date(2026, 7, 24)
 
@@ -147,6 +149,9 @@ class TestListRooms:
         assert [room.id for room in result] == ["room-2"]
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.room_service
 class TestCreateRoom:
     def test_success_commits_and_returns_schema(self, room_service, mock_db, mocker):
         room_service.room_repository.get_by_number_location.return_value = None
@@ -176,6 +181,9 @@ class TestCreateRoom:
             room_service.create_room(payload)
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.room_service
 class TestUpdateRoom:
     @pytest.mark.parametrize(
         "update_data",
@@ -211,6 +219,9 @@ class TestUpdateRoom:
             room_service.update_room("missing-id", update)
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.room_service
 class TestDeleteRoom:
     def test_success_deletes_and_commits(self, room_service, mock_db, mocker):
         existing = make_room(mocker)

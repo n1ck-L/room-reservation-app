@@ -26,8 +26,10 @@ def room_create_payload():
         "location": "a",
         "equipment": ["a", "b"],
     }
- 
- 
+
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.auth_router
 class TestLoginResponse:
     """POST /auth/tokens"""
  
@@ -68,6 +70,9 @@ class TestLoginResponse:
         mock_auth_service.login.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.auth_router
 class TestResfreshResponse:
     """POST /auth/tokens/refresh"""
 
@@ -100,6 +105,9 @@ class TestResfreshResponse:
         mock_auth_service.refresh_token.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.auth_router
 class TestRevokeResponse:
     """POST /auth/tokens/revoke"""
  
@@ -117,6 +125,9 @@ class TestRevokeResponse:
         mock_auth_service.revoke_token.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.auth_router
 class TestGetCurrentUserDependency:
  
     def test_valid_token_grants_access(

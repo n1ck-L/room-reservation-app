@@ -30,6 +30,9 @@ def make_refresh_orm(mocker, is_revoked=False, expires_delta=timedelta(days=1)):
     )
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.auth_service
 class TestLogin:
     def test_success_returns_token_pair_and_persists_refresh(
         self, auth_service, mock_db, mocker
@@ -67,6 +70,9 @@ class TestLogin:
             auth_service.login(payload)
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.auth_service
 class TestRefreshToken:
     def test_success_returns_new_access_token(self, auth_service, mocker):
         auth_service.refresh_repository.get_by_token.return_value = make_refresh_orm(
@@ -139,6 +145,9 @@ class TestRefreshToken:
             auth_service.refresh_token(token_data)
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.auth_service
 class TestRevokeToken:
     def test_existing_token_gets_revoked_and_committed(
         self, auth_service, mock_db, mocker
@@ -161,6 +170,9 @@ class TestRevokeToken:
         mock_db.commit.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.auth_service
 class TestGetCurrentUser:
     def test_success_returns_current_user(self, auth_service, mocker):
         auth_service.user_repository.get_by_id.return_value = mocker.MagicMock(

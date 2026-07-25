@@ -3,7 +3,7 @@ import datetime
 import pytest
 
 from app.services.exceptions import NotFoundError
-from tests.conftest import AUTH_DENIAL_CASES_ADMIN, AUTH_DENIAL_CASES_NO_ADMIN
+from tests.unit.routers.conftest import AUTH_DENIAL_CASES_ADMIN, AUTH_DENIAL_CASES_NO_ADMIN
 
 
 @pytest.fixture
@@ -21,6 +21,9 @@ def update_payload():
     return {"equipment": ["a", "b", "c"]}
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.room_router
 class TestRoomsGetResponse:
     """GET /rooms"""
 
@@ -108,6 +111,9 @@ class TestRoomsGetResponse:
         mock_room_service.list_rooms.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.room_router
 class TestRoomCreateResponse:
     """POST /rooms"""
 
@@ -155,6 +161,9 @@ class TestRoomCreateResponse:
         mock_room_service.create_room.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.room_router
 class TestRoomUpdateResponse:
     """PATCH /rooms/{room_id}"""
 
@@ -186,6 +195,9 @@ class TestRoomUpdateResponse:
         mock_room_service.update_room.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.room_router
 class TestRoomDeleteResponse:
     """DELETE /rooms/{room_id}"""
 

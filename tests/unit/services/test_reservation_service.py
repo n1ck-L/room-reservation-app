@@ -48,6 +48,9 @@ def make_reservation_orm(
     )
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.reservation_service
 class TestListReservations:
     def test_admin_see_all_reservations(self, reservation_service, mocker):
         reservation_service.repository.get_all.return_value = [
@@ -75,6 +78,9 @@ class TestListReservations:
         assert result[0].user_id == EMPLOYEE.id
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.reservation_service
 class TestCreateReservation:
     def _payload(self, user_id="emp-1"):
         return ReservationCreateSchema(
@@ -161,6 +167,9 @@ class TestCreateReservation:
             reservation_service.create_reservation(payload, EMPLOYEE)
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.reservation_service
 class TestUpdateReservation:
     def test_owner_can_update_own_reservation(
         self, reservation_service, mock_db, mocker
@@ -226,6 +235,9 @@ class TestUpdateReservation:
             reservation_service.update_reservation("res-1", update, EMPLOYEE)
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.reservation_service
 class TestDeleteReservation:
     def test_owner_can_delete_own_reservation(
         self, reservation_service, mock_db, mocker

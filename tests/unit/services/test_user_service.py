@@ -26,6 +26,9 @@ def make_user_orm(
     )
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.user_service
 class TestListUsers:
     def test_empty_repository_returns_empty_list(self, user_service):
         user_service.repository.get_all.return_value = []
@@ -45,6 +48,9 @@ class TestListUsers:
         assert result[0].role == "employee"
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.user_service
 class TestCreateUser:
     def test_success_hashes_password_and_commits(self, user_service, mock_db, mocker):
         user_service.repository.get_by_login.return_value = None
@@ -83,6 +89,9 @@ class TestCreateUser:
             user_service.create_user(payload)
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.user_service
 class TestUpdateUser:
     @pytest.mark.parametrize(
         "update_data",
@@ -122,6 +131,9 @@ class TestUpdateUser:
             user_service.update_user("missing-id", update)
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.user_service
 class TestDeleteUser:
     def test_success_deletes_and_commits(self, user_service, mock_db, mocker):
         existing = make_user_orm(mocker)
@@ -142,6 +154,9 @@ class TestDeleteUser:
             user_service.delete_user("missing-id")
 
 
+@pytest.mark.unit
+@pytest.mark.service
+@pytest.mark.user_service
 class TestEnsureDefaultAdmin:
     def _settings(self, mocker, seed=True):
         settings = mocker.MagicMock()

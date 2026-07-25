@@ -1,7 +1,7 @@
 import pytest
 
 from app.services.exceptions import NotFoundError
-from tests.conftest import AUTH_DENIAL_CASES_ADMIN
+from tests.unit.routers.conftest import AUTH_DENIAL_CASES_ADMIN
 
 
 @pytest.fixture
@@ -18,6 +18,9 @@ def update_payload():
     return {"email": "updated@example.com"}
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.user_router
 class TestUsersGetResponse:
     """GET /users"""
 
@@ -66,6 +69,9 @@ class TestUsersGetResponse:
         mock_user_service.list_users.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.user_router
 class TestUserCreateResponse:
     """POST /users"""
 
@@ -121,6 +127,9 @@ class TestUserCreateResponse:
         mock_user_service.create_user.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.user_router
 class TestUserUpdateResponse:
     """PATCH /users/{user_id}"""
 
@@ -173,6 +182,9 @@ class TestUserUpdateResponse:
         mock_user_service.create_user.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.user_router
 class TestUserDeleteResponse:
     """DELETE /users/{user_id}"""
 

@@ -3,7 +3,7 @@ from unittest.mock import ANY
 import pytest
 
 from app.services.exceptions import ForbiddenError, NotFoundError
-from tests.conftest import AUTH_DENIAL_CASES_NO_ADMIN
+from tests.unit.routers.conftest import AUTH_DENIAL_CASES_NO_ADMIN
 
 
 @pytest.fixture
@@ -21,6 +21,9 @@ def update_payload():
     return {"end_time": "2026-07-23T11:00:00"}
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.reservation_router
 class TestReservationsGetResponse:
     """GET /reservations"""
 
@@ -53,6 +56,9 @@ class TestReservationsGetResponse:
         mock_reservation_service.list_reservations.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.reservation_router
 class TestReservationCreateResponse:
     """POST /reservations"""
 
@@ -123,6 +129,9 @@ class TestReservationCreateResponse:
         mock_reservation_service.create_reservation.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.reservation_router
 class TestReservationUpdateResponse:
     """PATCH /reservations/{reservation_id}"""
 
@@ -193,6 +202,9 @@ class TestReservationUpdateResponse:
         mock_reservation_service.update_reservation.assert_not_called()
 
 
+@pytest.mark.unit
+@pytest.mark.router
+@pytest.mark.reservation_router
 class TestReservationDeleteResponse:
     """DELETE /reservations/{reservation_id}"""
 
