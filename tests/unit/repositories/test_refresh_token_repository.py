@@ -32,7 +32,7 @@ class TestCreate:
         assert result.expires_at == expires_at
         assert result.is_revoked is False
 
-    def test_adds_new_instance_to_session(self, repo, mock_db, mocker):
+    def test_repo_adds_new_instance_to_session(self, repo, mock_db, mocker):
         result = repo.create(
             user_id="user-2",
             token="xyz789",

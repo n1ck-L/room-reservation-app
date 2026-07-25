@@ -33,7 +33,7 @@ class TestCreate:
         assert reservation.start_time == start
         assert reservation.end_time == end
 
-    def test_adds_new_reservation_to_session(self, repo, mock_db):
+    def test_repo_adds_new_reservation_to_session(self, repo, mock_db):
         reservation = repo.create(
             room_id="room-2",
             user_id="user-2",
