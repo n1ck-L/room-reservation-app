@@ -1,4 +1,4 @@
-import select
+from sqlalchemy import select
 
 from app.models.room import RoomORM
 from app.repositories.base import BaseRepository
