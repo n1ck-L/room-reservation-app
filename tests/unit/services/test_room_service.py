@@ -159,7 +159,7 @@ class TestCreateRoom:
             number=payload.number,
             capacity=payload.capacity,
             location=payload.location,
-            equipment=payload.equipment
+            equipment=payload.equipment,
         )
         mock_db.commit.assert_called_once()
 
@@ -177,15 +177,20 @@ class TestCreateRoom:
 
 
 class TestUpdateRoom:
-    @pytest.mark.parametrize("update_data", [
-        {"number": 11, "capacity": 11},
-        {"number": 1, "location": "a"},
-        {"number": 10, "equipment": ["a"]},
-        {"capacity": 1, "location": "b"},
-        {"capacity": 10, "equipment": ["b"]},
-        {"location": "c", "equipment": ["c"]},
-    ])
-    def test_updates_only_provided_fields(self, room_service, mock_db, mocker, update_data):
+    @pytest.mark.parametrize(
+        "update_data",
+        [
+            {"number": 11, "capacity": 11},
+            {"number": 1, "location": "a"},
+            {"number": 10, "equipment": ["a"]},
+            {"capacity": 1, "location": "b"},
+            {"capacity": 10, "equipment": ["b"]},
+            {"location": "c", "equipment": ["c"]},
+        ],
+    )
+    def test_updates_only_provided_fields(
+        self, room_service, mock_db, mocker, update_data
+    ):
         existing = make_room(mocker)
         room_service.room_repository.get_by_id.return_value = existing
         update = RoomUpdateSchema(**update_data)
@@ -200,7 +205,9 @@ class TestUpdateRoom:
         room_service.room_repository.get_by_id.return_value = None
         update = RoomUpdateSchema(capacity=10)
 
-        with pytest.raises(NotFoundError, match=r"Комната с id=missing-id не найден\(-a\)"):
+        with pytest.raises(
+            NotFoundError, match=r"Комната с id=missing-id не найден\(-a\)"
+        ):
             room_service.update_room("missing-id", update)
 
 
@@ -217,5 +224,7 @@ class TestDeleteRoom:
     def test_unknown_room_raises_not_found(self, room_service):
         room_service.room_repository.get_by_id.return_value = None
 
-        with pytest.raises(NotFoundError, match=r"Комната с id=missing-id не найден\(-a\)"):
+        with pytest.raises(
+            NotFoundError, match=r"Комната с id=missing-id не найден\(-a\)"
+        ):
             room_service.delete_room("missing-id")

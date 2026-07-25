@@ -113,7 +113,9 @@ class TestCreateReservation:
         reservation_service.room_repository.get_by_id.return_value = mocker.MagicMock()
         reservation_service.user_repository.get_by_id.return_value = None
 
-        with pytest.raises(NotFoundError, match=r"Пользователь с id=emp-1 не найден\(-a\)"):
+        with pytest.raises(
+            NotFoundError, match=r"Пользователь с id=emp-1 не найден\(-a\)"
+        ):
             reservation_service.create_reservation(
                 self._payload(user_id=EMPLOYEE.id), EMPLOYEE
             )
@@ -143,7 +145,9 @@ class TestCreateReservation:
         assert result.user_id == EMPLOYEE.id
         mock_db.commit.assert_called_once()
 
-    def test_start_time_after_end_time_raises_value_error(self, reservation_service, mocker):
+    def test_start_time_after_end_time_raises_value_error(
+        self, reservation_service, mocker
+    ):
         reservation_service.room_repository.get_by_id.return_value = mocker.MagicMock()
         reservation_service.user_repository.get_by_id.return_value = mocker.MagicMock()
         payload = ReservationCreateSchema(
@@ -195,7 +199,9 @@ class TestUpdateReservation:
         reservation_service.room_repository.get_by_id.return_value = None
         update = ReservationUpdateSchema(room_id="missing")
 
-        with pytest.raises(NotFoundError, match=r"Комната с id=missing не найден\(-a\)"):
+        with pytest.raises(
+            NotFoundError, match=r"Комната с id=missing не найден\(-a\)"
+        ):
             reservation_service.update_reservation("res-1", update, EMPLOYEE)
 
     def test_user_change_validates_user_exists(self, reservation_service, mocker):
@@ -204,7 +210,9 @@ class TestUpdateReservation:
         reservation_service.user_repository.get_by_id.return_value = None
         update = ReservationUpdateSchema(user_id="missing")
 
-        with pytest.raises(NotFoundError, match=r"Пользователь с id=missing не найден\(-a\)"):
+        with pytest.raises(
+            NotFoundError, match=r"Пользователь с id=missing не найден\(-a\)"
+        ):
             reservation_service.update_reservation("res-1", update, EMPLOYEE)
 
     def test_invalid_time_range_raises_value_error(self, reservation_service, mocker):
@@ -219,7 +227,9 @@ class TestUpdateReservation:
 
 
 class TestDeleteReservation:
-    def test_owner_can_delete_own_reservation(self, reservation_service, mock_db, mocker):
+    def test_owner_can_delete_own_reservation(
+        self, reservation_service, mock_db, mocker
+    ):
         existing = make_reservation_orm(mocker, user_id=EMPLOYEE.id)
         reservation_service.repository.get_by_id.return_value = existing
 
@@ -228,14 +238,16 @@ class TestDeleteReservation:
         reservation_service.repository.delete.assert_called_once_with(existing)
         mock_db.commit.assert_called_once()
 
-    def test_admin_can_delete_any_reservation(self, reservation_service, mock_db, mocker):
-            existing = make_reservation_orm(mocker, user_id=EMPLOYEE.id)
-            reservation_service.repository.get_by_id.return_value = existing
-    
-            reservation_service.delete_reservation("res-1", ADMIN)
-    
-            reservation_service.repository.delete.assert_called_once_with(existing)
-            mock_db.commit.assert_called_once()
+    def test_admin_can_delete_any_reservation(
+        self, reservation_service, mock_db, mocker
+    ):
+        existing = make_reservation_orm(mocker, user_id=EMPLOYEE.id)
+        reservation_service.repository.get_by_id.return_value = existing
+
+        reservation_service.delete_reservation("res-1", ADMIN)
+
+        reservation_service.repository.delete.assert_called_once_with(existing)
+        mock_db.commit.assert_called_once()
 
     def test_other_employee_cannot_delete(self, reservation_service, mocker):
         existing = make_reservation_orm(mocker, user_id=EMPLOYEE.id)

@@ -118,7 +118,7 @@ class TestRefreshToken:
         )
         mocker.patch(
             "app.services.auth.decode_refresh_token",
-            return_value={"type": "refresh", "sub": "user-1"}
+            return_value={"type": "refresh", "sub": "user-1"},
         )
         token_data = TokenRefreshSchema(refresh_token="refresh_token")
 
@@ -206,5 +206,7 @@ class TestGetCurrentUser:
             return_value={"type": "access", "sub": "missing"},
         )
 
-        with pytest.raises(NotFoundError, match=r"Пользователь с id=missing не найден\(-a\)"):
+        with pytest.raises(
+            NotFoundError, match=r"Пользователь с id=missing не найден\(-a\)"
+        ):
             auth_service.get_current_user("token")
