@@ -232,8 +232,9 @@ http://localhost:8080/docs
 ```
 
 <p align="center">
-  <img src="docs/images/1-login.png" alt="Swagger Login" width="900">
+  <img src="docs/img/1-login.png" alt="Swagger Login">
 </p>
+
 > **Скриншот:** форма авторизации и успешный ответ `POST /auth/tokens`.
 
 
@@ -246,9 +247,10 @@ http://localhost:8080/docs
 После успешной авторизации все защищенные эндпоинты станут доступны для выполнения.
 
 <p align="center">
-  <img src="docs/images/2-auth.png" alt="Token Auth" width="900">
+  <img src="docs/img/2-auth.png" alt="Token Auth" width="600">
 </p>
-> **Скриншот:** окно **Authorize** с введенным JWT-токеном.
+
+> **Скриншот:** окно **Authorize** для ввода JWT-токеном.
 
 
 ### 3. Выполнение защищенного запроса
@@ -283,8 +285,9 @@ GET /users
 ```
 
 <p align="center">
-  <img src="docs/images/3-get_users.png" alt="GET Users" width="900">
+  <img src="docs/img/3-get_users.png" alt="GET Users">
 </p>
+
 > **Скриншот:** успешное выполнение запроса `GET /users`.
 
 ### 4. Работа с остальными эндпоинтами
