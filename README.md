@@ -56,13 +56,7 @@ git clone https://github.com/n1ck-L/room-reservation-app.git
 cd room-reservation-app
 ```
 
-### 2. Установка зависимостей
-Все зависимости проекта управляются с помощью Poetry.
-```bash
-poetry install
-```
-
-### 3. Настройка переменных окружения
+### 2. Настройка переменных окружения
 Переменные окружения берутся из файла `.env`. В репозитории он расположен в корне проекта. По аналогии с примером из репозитория необходимо внести собственные данные (при необходимости).
 
 Пример измененного содержимого:
@@ -77,7 +71,7 @@ JWT_SECRET_KEY=secret-token
 JWT_REFRESH_SECRET_KEY=secret-token
 ```
 
-### 4. Запуск и управление
+### 3. Запуск и управление
 
 Приложение поддерживает несколько способов запуска, что позволяет использовать его как для локальной разработки, так и для контейнеризированного развертывания.
 
@@ -90,24 +84,41 @@ JWT_REFRESH_SECRET_KEY=secret-token
 
 Ниже приведены **инструкции для каждого из способов** запуска.
 
-#### Запуск через Uvicorn
-1. Запустите контейнер с PostgreSQL:
-```bash
-docker run -d --name reservation-app-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=reservation-app-db -p 15432:5432 -v pgdata:/var/lib/postgresql/data postgres:16-alpine
-```
-2. Запустите приложение:
-```bash
-uvicorn app.main:app --port 8080
-```
-
 #### Запуск через Poetry
 1. Запустите контейнер с PostgreSQL:
 ```bash
 docker run -d --name reservation-app-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=reservation-app-db -p 15432:5432 -v pgdata:/var/lib/postgresql/data postgres:16-alpine
 ```
+3. Установка зависимостей
+
+Все зависимости проекта управляются с помощью Poetry. Для этого способа необязательно активировать вирутальное окружение.
+```bash
+poetry install
+```
 2. Запустите приложение:
 ```bash
 poetry run uvicorn app.main:app --port 8080
+```
+
+#### Запуск через Uvicorn
+1. Запустите контейнер с PostgreSQL:
+```bash
+docker run -d --name reservation-app-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=reservation-app-db -p 15432:5432 -v pgdata:/var/lib/postgresql/data postgres:16-alpine
+```
+2. Активируйте вирутальное окружение
+
+Инструкции по созданию и активации виртуального окружения смотрите в [`docs/development.md`](docs/development.md). Виртуальное окружение требуется, так как последние рекомендации PEP запрещают глобальную установку Python-пакетов.
+
+3. Установка зависимостей
+
+В **виртуальном окружении** выполните команду:
+```bash
+poetry install
+```
+
+4. Запустите приложение:
+```bash
+uvicorn app.main:app --port 8080
 ```
 
 #### Запуск через Docker
