@@ -89,13 +89,14 @@ JWT_REFRESH_SECRET_KEY=secret-token
 ```bash
 docker run -d --name reservation-app-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=reservation-app-db -p 15432:5432 -v pgdata:/var/lib/postgresql/data postgres:16-alpine
 ```
-3. Установка зависимостей
+2. Установка зависимостей
 
 Все зависимости проекта управляются с помощью Poetry. Для этого способа необязательно активировать вирутальное окружение.
 ```bash
 poetry install
 ```
-2. Запустите приложение:
+
+3. Запустите приложение:
 ```bash
 poetry run uvicorn app.main:app --port 8080
 ```
