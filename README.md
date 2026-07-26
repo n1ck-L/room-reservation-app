@@ -117,7 +117,7 @@ docker network create reservation-net
 ```
 2. Запустите контейнер с PostgreSQL:
 ```bash
-docker run -d --name reservation-app-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=reservation-app-db -p 15432:5432 -v pgdata:/var/lib/postgresql/data postgres:16-alpine
+docker run -d --name reservation-app-db --network reservation-net -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=reservation-app-db -p 15432:5432 -v pgdata:/var/lib/postgresql/data postgres:16-alpine
 ```
 3. Соберите образ приложения:
 ```bash
