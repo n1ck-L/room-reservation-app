@@ -32,18 +32,21 @@ Poetry **автоматически** создает виртуальное ок
 ### Windows (PowerShell)
 
 ```powershell
+python -m venv venv
 .venv\Scripts\Activate.ps1
 ```
 
 ### Windows (CMD)
 
 ```cmd
+python -m venv venv
 .venv\Scripts\activate.bat
 ```
 
 ### Linux / macOS
 
 ```bash
+python3 -m venv venv
 source .venv/bin/activate
 ```
 
