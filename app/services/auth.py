@@ -55,9 +55,7 @@ class AuthService:
         )
         self.db.commit()
 
-        return TokenSchema(
-            access_token=access_token, refresh_token=refresh_token
-        )
+        return TokenSchema(access_token=access_token, refresh_token=refresh_token)
 
     def refresh_token(self, token_data: TokenRefreshSchema) -> TokenSchema:
         try:
@@ -68,9 +66,7 @@ class AuthService:
         if payload.get("type") != "refresh":
             raise UnauthorizedError("Неверный тип токена")
 
-        refresh_orm = self.refresh_repository.get_by_token(
-            token_data.refresh_token
-        )
+        refresh_orm = self.refresh_repository.get_by_token(token_data.refresh_token)
         if refresh_orm is None or refresh_orm.is_revoked:
             raise UnauthorizedError("Refresh-токен недействителен")
 
@@ -87,9 +83,7 @@ class AuthService:
         )
 
     def revoke_token(self, token_data: TokenRevokeSchema) -> None:
-        refresh_orm = self.refresh_repository.get_by_token(
-            token_data.refresh_token
-        )
+        refresh_orm = self.refresh_repository.get_by_token(token_data.refresh_token)
         if refresh_orm is None:
             return
 

@@ -82,9 +82,7 @@ class ReservationService:
             reservation_for_update.room_id = reservation_update.room_id
 
         if reservation_update.user_id is not None:
-            self._ensure_can_modify(
-                reservation_for_update.user_id, current_user
-            )
+            self._ensure_can_modify(reservation_for_update.user_id, current_user)
 
             user = self.user_repository.get_by_id(reservation_update.user_id)
             if user is None:

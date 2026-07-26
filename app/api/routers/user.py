@@ -33,9 +33,7 @@ def create_user(
     try:
         return user_service.create_user(user_create=payload)
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
 
 
 @router.patch("/{user_id}", responses=combine(ADMIN, RESP_404))
@@ -48,9 +46,7 @@ def update_user(
     try:
         return user_service.update_user(user_id=user_id, user_update=payload)
     except NotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
 @router.delete(
@@ -66,6 +62,4 @@ def delete_user(
     try:
         user_service.delete_user(user_id=user_id)
     except NotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))

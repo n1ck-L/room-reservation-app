@@ -29,12 +29,8 @@ router = APIRouter(prefix="/rooms", tags=["rooms"])
 
 @router.get("", responses=AUTH)
 def list_rooms(
-    date: date | None = Query(
-        None, description="Дата для проверки свободных слотов"
-    ),
-    available: bool | None = Query(
-        None, description="Фильтр свободных слотов"
-    ),
+    date: date | None = Query(None, description="Дата для проверки свободных слотов"),
+    available: bool | None = Query(None, description="Фильтр свободных слотов"),
     _: CurrentUserSchema = Depends(get_current_user),
     room_service: RoomService = Depends(get_room_service),
 ) -> list[RoomSchema] | list[RoomAvailabilitySchema]:
@@ -55,9 +51,7 @@ def create_room(
     try:
         return room_service.create_room(room_create=payload)
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
 
 
 @router.patch(

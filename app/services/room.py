@@ -46,9 +46,7 @@ class RoomService:
                 if reservation.room_id == room.id
             ]
 
-            free_slots = self._calc_free_slots_per_room(
-                target_date, room_reservations
-            )
+            free_slots = self._calc_free_slots_per_room(target_date, room_reservations)
             room_data = RoomSchema.model_validate(room)
 
             result.append(
@@ -73,10 +71,12 @@ class RoomService:
         return result
 
     def create_room(self, room_create: RoomCreateSchema) -> RoomSchema:
-        existing = self.room_repository.get_by_number_location(room_create.number, room_create.location)
+        existing = self.room_repository.get_by_number_location(
+            room_create.number, room_create.location
+        )
         if existing is not None:
             raise ValueError("Комната с таким номером по этому адресу уже существует")
-        
+
         room_orm = self.room_repository.create(
             number=room_create.number,
             capacity=room_create.capacity,
@@ -86,9 +86,7 @@ class RoomService:
         self.db.commit()
         return RoomSchema.model_validate(room_orm)
 
-    def update_room(
-        self, room_id: str, room_update: RoomUpdateSchema
-    ) -> RoomSchema:
+    def update_room(self, room_id: str, room_update: RoomUpdateSchema) -> RoomSchema:
         room_for_update = self.room_repository.get_by_id(id=room_id)
         if room_for_update is None:
             raise NotFoundError("Комната", room_id)

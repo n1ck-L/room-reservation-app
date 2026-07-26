@@ -35,9 +35,7 @@ class UserService:
         self.db.commit()
         return UserSchema.model_validate(user_orm)
 
-    def update_user(
-        self, user_id: str, user_update: UserUpdateSchema
-    ) -> UserSchema:
+    def update_user(self, user_id: str, user_update: UserUpdateSchema) -> UserSchema:
         user_for_update = self.repository.get_by_id(id=user_id)
         if user_for_update is None:
             raise NotFoundError("Пользователь", user_id)
@@ -68,18 +66,13 @@ class UserService:
         if not settings.SEED_DEFAULT_ADMIN:
             return
 
-        if (
-            self.repository.get_by_login(settings.DEFAULT_ADMIN_LOGIN)
-            is not None
-        ):
+        if self.repository.get_by_login(settings.DEFAULT_ADMIN_LOGIN) is not None:
             return
 
         self.repository.create(
             email=settings.DEFAULT_ADMIN_EMAIL,
             login=settings.DEFAULT_ADMIN_LOGIN,
-            password=hash_password(
-                settings.DEFAULT_ADMIN_PASSWORD.get_secret_value()
-            ),
+            password=hash_password(settings.DEFAULT_ADMIN_PASSWORD.get_secret_value()),
             role=UserRole.ADMIN,
         )
         self.db.commit()
