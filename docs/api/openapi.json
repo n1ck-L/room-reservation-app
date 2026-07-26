@@ -1,1 +1,1615 @@
-{"openapi":"3.1.0","info":{"title":"FastAPI","version":"0.1.0"},"paths":{"/users":{"get":{"tags":["users"],"summary":"Get Users","operationId":"get_users_users_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"items":{"$ref":"#/components/schemas/UserSchema"},"type":"array","title":"Response Get Users Users Get"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}}},"security":[{"HTTPBearer":[]}]},"post":{"tags":["users"],"summary":"Create User","operationId":"create_user_users_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserCreateSchema"}}},"required":true},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserSchema"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}},"409":{"description":"Data conflict","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}}},"security":[{"HTTPBearer":[]}]}},"/users/{user_id}":{"patch":{"tags":["users"],"summary":"Update User","operationId":"update_user_users__user_id__patch","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","title":"User Id"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserUpdateSchema"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserSchema"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}},"404":{"description":"Resource was not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}}}},"delete":{"tags":["users"],"summary":"Delete User","operationId":"delete_user_users__user_id__delete","security":[{"HTTPBearer":[]}],"parameters":[{"name":"user_id","in":"path","required":true,"schema":{"type":"string","title":"User Id"}}],"responses":{"204":{"description":"Successful Response"},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}},"404":{"description":"Resource was not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}}}}},"/rooms":{"get":{"tags":["rooms"],"summary":"List Rooms","operationId":"list_rooms_rooms_get","security":[{"HTTPBearer":[]}],"parameters":[{"name":"date","in":"query","required":false,"schema":{"anyOf":[{"type":"string","format":"date"},{"type":"null"}],"description":"Дата для проверки свободных слотов","title":"Date"},"description":"Дата для проверки свободных слотов"},{"name":"available","in":"query","required":false,"schema":{"anyOf":[{"type":"boolean"},{"type":"null"}],"description":"Фильтр свободных слотов","title":"Available"},"description":"Фильтр свободных слотов"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"anyOf":[{"type":"array","items":{"$ref":"#/components/schemas/RoomSchema"}},{"type":"array","items":{"$ref":"#/components/schemas/RoomAvailabilitySchema"}}],"title":"Response List Rooms Rooms Get"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}}}},"post":{"tags":["rooms"],"summary":"Create Room","operationId":"create_room_rooms_post","security":[{"HTTPBearer":[]}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RoomCreateSchema"}}}},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/RoomSchema"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}}}}},"/rooms/{room_id}":{"patch":{"tags":["rooms"],"summary":"Update Room","operationId":"update_room_rooms__room_id__patch","security":[{"HTTPBearer":[]}],"parameters":[{"name":"room_id","in":"path","required":true,"schema":{"type":"string","title":"Room Id"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RoomUpdateSchema"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/RoomSchema"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}},"404":{"description":"Resource was not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}}}},"delete":{"tags":["rooms"],"summary":"Delete Room","operationId":"delete_room_rooms__room_id__delete","security":[{"HTTPBearer":[]}],"parameters":[{"name":"room_id","in":"path","required":true,"schema":{"type":"string","title":"Room Id"}}],"responses":{"204":{"description":"Successful Response"},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}},"404":{"description":"Resource was not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}}}}},"/reservations":{"get":{"tags":["reservations"],"summary":"Get Reservations","operationId":"get_reservations_reservations_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"items":{"$ref":"#/components/schemas/ReservationSchema"},"type":"array","title":"Response Get Reservations Reservations Get"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}}},"security":[{"HTTPBearer":[]}]},"post":{"tags":["reservations"],"summary":"Create Reservation","operationId":"create_reservation_reservations_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ReservationCreateSchema"}}},"required":true},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ReservationSchema"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"404":{"description":"Resource was not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}}},"security":[{"HTTPBearer":[]}]}},"/reservations/{reservation_id}":{"patch":{"tags":["reservations"],"summary":"Update Reservation","operationId":"update_reservation_reservations__reservation_id__patch","security":[{"HTTPBearer":[]}],"parameters":[{"name":"reservation_id","in":"path","required":true,"schema":{"type":"string","title":"Reservation Id"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ReservationUpdateSchema"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ReservationSchema"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"404":{"description":"Resource was not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}}}},"delete":{"tags":["reservations"],"summary":"Delete Reservation","operationId":"delete_reservation_reservations__reservation_id__delete","security":[{"HTTPBearer":[]}],"parameters":[{"name":"reservation_id","in":"path","required":true,"schema":{"type":"string","title":"Reservation Id"}}],"responses":{"204":{"description":"Successful Response"},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}},"403":{"description":"Not enough rights","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"404":{"description":"Resource was not found","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}}}}},"/auth/tokens":{"post":{"tags":["auth"],"summary":"Login","operationId":"login_auth_tokens_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/LoginSchema"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenSchema"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}}}}},"/auth/tokens/refresh":{"post":{"tags":["auth"],"summary":"Refresh","operationId":"refresh_auth_tokens_refresh_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenRefreshSchema"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenSchema"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}}}}},"/auth/tokens/revoke":{"post":{"tags":["auth"],"summary":"Revoke","operationId":"revoke_auth_tokens_revoke_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenRevokeSchema"}}},"required":true},"responses":{"204":{"description":"Successful Response"},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ValidationErrorSchema"}}}}}}}},"components":{"schemas":{"ErrorSchema":{"properties":{"detail":{"type":"string","title":"Detail"}},"type":"object","required":["detail"],"title":"ErrorSchema"},"LoginSchema":{"properties":{"login":{"type":"string","title":"Login"},"password":{"type":"string","format":"password","title":"Password","writeOnly":true}},"type":"object","required":["login","password"],"title":"LoginSchema"},"ReservationCreateSchema":{"properties":{"room_id":{"type":"string","title":"Room Id"},"user_id":{"type":"string","title":"User Id"},"start_time":{"type":"string","format":"date-time","title":"Start Time"},"end_time":{"type":"string","format":"date-time","title":"End Time"}},"type":"object","required":["room_id","user_id","start_time","end_time"],"title":"ReservationCreateSchema"},"ReservationSchema":{"properties":{"id":{"type":"string","title":"Id"},"room_id":{"type":"string","title":"Room Id"},"user_id":{"type":"string","title":"User Id"},"start_time":{"type":"string","format":"date-time","title":"Start Time"},"end_time":{"type":"string","format":"date-time","title":"End Time"}},"type":"object","required":["id","room_id","user_id","start_time","end_time"],"title":"ReservationSchema"},"ReservationUpdateSchema":{"properties":{"room_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Room Id"},"user_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"User Id"},"start_time":{"anyOf":[{"type":"string","format":"date-time"},{"type":"null"}],"title":"Start Time"},"end_time":{"anyOf":[{"type":"string","format":"date-time"},{"type":"null"}],"title":"End Time"}},"type":"object","title":"ReservationUpdateSchema"},"RoomAvailabilitySchema":{"properties":{"id":{"type":"string","title":"Id"},"number":{"type":"integer","exclusiveMinimum":0.0,"title":"Number"},"capacity":{"type":"integer","exclusiveMinimum":0.0,"title":"Capacity"},"location":{"type":"string","maxLength":100,"title":"Location"},"equipment":{"items":{"type":"string"},"type":"array","title":"Equipment"},"date":{"type":"string","format":"date","title":"Date"},"free_slots":{"items":{"$ref":"#/components/schemas/TimeSlotSchema"},"type":"array","title":"Free Slots"},"is_bookable":{"type":"boolean","title":"Is Bookable"}},"type":"object","required":["id","number","capacity","location","date","free_slots","is_bookable"],"title":"RoomAvailabilitySchema","description":"Комната + слоты на конкретную дату"},"RoomCreateSchema":{"properties":{"number":{"type":"integer","exclusiveMinimum":0.0,"title":"Number"},"capacity":{"type":"integer","exclusiveMinimum":0.0,"title":"Capacity"},"location":{"type":"string","maxLength":100,"title":"Location"},"equipment":{"items":{"type":"string"},"type":"array","title":"Equipment"}},"type":"object","required":["number","capacity","location"],"title":"RoomCreateSchema"},"RoomSchema":{"properties":{"id":{"type":"string","title":"Id"},"number":{"type":"integer","exclusiveMinimum":0.0,"title":"Number"},"capacity":{"type":"integer","exclusiveMinimum":0.0,"title":"Capacity"},"location":{"type":"string","maxLength":100,"title":"Location"},"equipment":{"items":{"type":"string"},"type":"array","title":"Equipment"}},"type":"object","required":["id","number","capacity","location"],"title":"RoomSchema"},"RoomUpdateSchema":{"properties":{"number":{"anyOf":[{"type":"integer","exclusiveMinimum":0.0},{"type":"null"}],"title":"Number"},"capacity":{"anyOf":[{"type":"integer","exclusiveMinimum":0.0},{"type":"null"}],"title":"Capacity"},"location":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Location"},"equipment":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Equipment"}},"type":"object","title":"RoomUpdateSchema"},"TimeSlotSchema":{"properties":{"start":{"type":"string","format":"date-time","title":"Start"},"end":{"type":"string","format":"date-time","title":"End"}},"type":"object","required":["start","end"],"title":"TimeSlotSchema"},"TokenRefreshSchema":{"properties":{"refresh_token":{"type":"string","title":"Refresh Token"}},"type":"object","required":["refresh_token"],"title":"TokenRefreshSchema"},"TokenRevokeSchema":{"properties":{"refresh_token":{"type":"string","title":"Refresh Token"}},"type":"object","required":["refresh_token"],"title":"TokenRevokeSchema"},"TokenSchema":{"properties":{"access_token":{"type":"string","title":"Access Token"},"refresh_token":{"type":"string","title":"Refresh Token"},"token_type":{"type":"string","title":"Token Type","default":"bearer"}},"type":"object","required":["access_token","refresh_token"],"title":"TokenSchema"},"UserCreateSchema":{"properties":{"email":{"type":"string","title":"Email"},"login":{"type":"string","title":"Login"},"password":{"type":"string","format":"password","title":"Password","writeOnly":true},"role":{"$ref":"#/components/schemas/UserRole","default":"employee"}},"type":"object","required":["email","login","password"],"title":"UserCreateSchema"},"UserRole":{"type":"string","enum":["admin","employee"],"title":"UserRole"},"UserSchema":{"properties":{"id":{"type":"string","title":"Id"},"email":{"type":"string","title":"Email"},"login":{"type":"string","title":"Login"},"password":{"type":"string","format":"password","title":"Password","writeOnly":true},"role":{"$ref":"#/components/schemas/UserRole"}},"type":"object","required":["id","email","login","password","role"],"title":"UserSchema"},"UserUpdateSchema":{"properties":{"email":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Email"},"login":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Login"},"password":{"anyOf":[{"type":"string","format":"password","writeOnly":true},{"type":"null"}],"title":"Password"},"role":{"anyOf":[{"$ref":"#/components/schemas/UserRole"},{"type":"null"}]}},"type":"object","title":"UserUpdateSchema"},"ValidationErrorItemSchema":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Loc"},"msg":{"type":"string","title":"Msg"},"type":{"type":"string","title":"Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationErrorItemSchema"},"ValidationErrorSchema":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationErrorItemSchema"},"type":"array","title":"Detail"}},"type":"object","required":["detail"],"title":"ValidationErrorSchema"}},"securitySchemes":{"HTTPBearer":{"type":"http","scheme":"bearer"}}}}
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "FastAPI",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get Users",
+                "operationId": "get_users_users_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserSchema"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Get Users Users Get"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create User",
+                "operationId": "create_user_users_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCreateSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Data conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/users/{user_id}": {
+            "patch": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update User",
+                "operationId": "update_user_users__user_id__patch",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdateSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete User",
+                "operationId": "delete_user_users__user_id__delete",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms": {
+            "get": {
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "List Rooms",
+                "operationId": "list_rooms_rooms_get",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "format": "date"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Дата для проверки свободных слотов",
+                            "title": "Date"
+                        },
+                        "description": "Дата для проверки свободных слотов"
+                    },
+                    {
+                        "name": "available",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Фильтр свободных слотов",
+                            "title": "Available"
+                        },
+                        "description": "Фильтр свободных слотов"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/RoomSchema"
+                                            }
+                                        },
+                                        {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/RoomAvailabilitySchema"
+                                            }
+                                        }
+                                    ],
+                                    "title": "Response List Rooms Rooms Get"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Create Room",
+                "operationId": "create_room_rooms_post",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoomCreateSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RoomSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms/{room_id}": {
+            "patch": {
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Update Room",
+                "operationId": "update_room_rooms__room_id__patch",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "room_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Room Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoomUpdateSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RoomSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Delete Room",
+                "operationId": "delete_room_rooms__room_id__delete",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "room_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Room Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reservations": {
+            "get": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Get Reservations",
+                "operationId": "get_reservations_reservations_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/ReservationSchema"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Get Reservations Reservations Get"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Create Reservation",
+                "operationId": "create_reservation_reservations_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReservationCreateSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReservationSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/reservations/{reservation_id}": {
+            "patch": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Update Reservation",
+                "operationId": "update_reservation_reservations__reservation_id__patch",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "reservation_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Reservation Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReservationUpdateSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReservationSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Delete Reservation",
+                "operationId": "delete_reservation_reservations__reservation_id__delete",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "reservation_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Reservation Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not enough rights",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/tokens": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login",
+                "operationId": "login_auth_tokens_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/tokens/refresh": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh",
+                "operationId": "refresh_auth_tokens_refresh_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenRefreshSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/tokens/revoke": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Revoke",
+                "operationId": "revoke_auth_tokens_revoke_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenRevokeSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ErrorSchema": {
+                "properties": {
+                    "detail": {
+                        "type": "string",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "detail"
+                ],
+                "title": "ErrorSchema"
+            },
+            "LoginSchema": {
+                "properties": {
+                    "login": {
+                        "type": "string",
+                        "title": "Login"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "title": "Password",
+                        "writeOnly": true
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "login",
+                    "password"
+                ],
+                "title": "LoginSchema"
+            },
+            "ReservationCreateSchema": {
+                "properties": {
+                    "room_id": {
+                        "type": "string",
+                        "title": "Room Id"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "title": "User Id"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Start Time"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "End Time"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "room_id",
+                    "user_id",
+                    "start_time",
+                    "end_time"
+                ],
+                "title": "ReservationCreateSchema"
+            },
+            "ReservationSchema": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "room_id": {
+                        "type": "string",
+                        "title": "Room Id"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "title": "User Id"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Start Time"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "End Time"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "room_id",
+                    "user_id",
+                    "start_time",
+                    "end_time"
+                ],
+                "title": "ReservationSchema"
+            },
+            "ReservationUpdateSchema": {
+                "properties": {
+                    "room_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Room Id"
+                    },
+                    "user_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "User Id"
+                    },
+                    "start_time": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Start Time"
+                    },
+                    "end_time": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "End Time"
+                    }
+                },
+                "type": "object",
+                "title": "ReservationUpdateSchema"
+            },
+            "RoomAvailabilitySchema": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "number": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0.0,
+                        "title": "Number"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0.0,
+                        "title": "Capacity"
+                    },
+                    "location": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "title": "Location"
+                    },
+                    "equipment": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Equipment"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "title": "Date"
+                    },
+                    "free_slots": {
+                        "items": {
+                            "$ref": "#/components/schemas/TimeSlotSchema"
+                        },
+                        "type": "array",
+                        "title": "Free Slots"
+                    },
+                    "is_bookable": {
+                        "type": "boolean",
+                        "title": "Is Bookable"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "number",
+                    "capacity",
+                    "location",
+                    "date",
+                    "free_slots",
+                    "is_bookable"
+                ],
+                "title": "RoomAvailabilitySchema",
+                "description": "Комната + слоты на конкретную дату"
+            },
+            "RoomCreateSchema": {
+                "properties": {
+                    "number": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0.0,
+                        "title": "Number"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0.0,
+                        "title": "Capacity"
+                    },
+                    "location": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "title": "Location"
+                    },
+                    "equipment": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Equipment"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "number",
+                    "capacity",
+                    "location"
+                ],
+                "title": "RoomCreateSchema"
+            },
+            "RoomSchema": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "number": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0.0,
+                        "title": "Number"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0.0,
+                        "title": "Capacity"
+                    },
+                    "location": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "title": "Location"
+                    },
+                    "equipment": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Equipment"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "number",
+                    "capacity",
+                    "location"
+                ],
+                "title": "RoomSchema"
+            },
+            "RoomUpdateSchema": {
+                "properties": {
+                    "number": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "exclusiveMinimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Number"
+                    },
+                    "capacity": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "exclusiveMinimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Capacity"
+                    },
+                    "location": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Location"
+                    },
+                    "equipment": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Equipment"
+                    }
+                },
+                "type": "object",
+                "title": "RoomUpdateSchema"
+            },
+            "TimeSlotSchema": {
+                "properties": {
+                    "start": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Start"
+                    },
+                    "end": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "End"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "start",
+                    "end"
+                ],
+                "title": "TimeSlotSchema"
+            },
+            "TokenRefreshSchema": {
+                "properties": {
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "refresh_token"
+                ],
+                "title": "TokenRefreshSchema"
+            },
+            "TokenRevokeSchema": {
+                "properties": {
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "refresh_token"
+                ],
+                "title": "TokenRevokeSchema"
+            },
+            "TokenSchema": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    },
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "title": "Token Type",
+                        "default": "bearer"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "access_token",
+                    "refresh_token"
+                ],
+                "title": "TokenSchema"
+            },
+            "UserCreateSchema": {
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "title": "Email"
+                    },
+                    "login": {
+                        "type": "string",
+                        "title": "Login"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "title": "Password",
+                        "writeOnly": true
+                    },
+                    "role": {
+                        "$ref": "#/components/schemas/UserRole",
+                        "default": "employee"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "email",
+                    "login",
+                    "password"
+                ],
+                "title": "UserCreateSchema"
+            },
+            "UserRole": {
+                "type": "string",
+                "enum": [
+                    "admin",
+                    "employee"
+                ],
+                "title": "UserRole"
+            },
+            "UserSchema": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "email": {
+                        "type": "string",
+                        "title": "Email"
+                    },
+                    "login": {
+                        "type": "string",
+                        "title": "Login"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "title": "Password",
+                        "writeOnly": true
+                    },
+                    "role": {
+                        "$ref": "#/components/schemas/UserRole"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "email",
+                    "login",
+                    "password",
+                    "role"
+                ],
+                "title": "UserSchema"
+            },
+            "UserUpdateSchema": {
+                "properties": {
+                    "email": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Email"
+                    },
+                    "login": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Login"
+                    },
+                    "password": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "password",
+                                "writeOnly": true
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Password"
+                    },
+                    "role": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/UserRole"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "UserUpdateSchema"
+            },
+            "ValidationErrorItemSchema": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Loc"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Msg"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationErrorItemSchema"
+            },
+            "ValidationErrorSchema": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationErrorItemSchema"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "detail"
+                ],
+                "title": "ValidationErrorSchema"
+            }
+        },
+        "securitySchemes": {
+            "HTTPBearer": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
